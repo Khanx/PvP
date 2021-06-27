@@ -1,0 +1,13 @@
+[
+	{
+		"name": "PvP",
+		"version": "0.1.0.0",
+		"description" : "Player vs Player",
+		"enableddefault" : true,
+		"dllpath": "PvP.dll",
+		"compatibleversions":
+			[
+				"0.8.1"
+			]
+	}
+]
