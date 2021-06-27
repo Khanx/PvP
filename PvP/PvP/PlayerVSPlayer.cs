@@ -255,11 +255,23 @@ namespace PvP
                 switch (i.Type)
                 {
                     //Light armor
-                    case 0:     damageModifier = 0.25f;     break;
+                    case 0:
+                        //The if works to use the BEST armor in the inventory
+                        if(damageModifier == 1)
+                            damageModifier = 0.25f;
+                    break;
+
                     //Medium armor
-                    case 1:     damageModifier = 0.50f;     break;
+                    case 1:
+                        if (damageModifier == 1 || damageModifier <0.5f)
+                            damageModifier = 0.50f;
+                    break;
+
                     //Heavy armor
-                    case 2:     damageModifier = 0.75f;     break;
+                    case 2:
+                        if (damageModifier == 1 || damageModifier < 0.75f)
+                            damageModifier = 0.75f;
+                    break;
                 }
             }
 
