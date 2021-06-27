@@ -4,6 +4,7 @@ namespace PvP
 {
     public struct Projectile
     {
+        //READ: https://discord.com/channels/345192439323033601/345214873082527756/835464495744417812
         public static float SlingerForce = 20f;
         public static float BowForce = 40f;
         public static float CrossbowForce = 50f;

@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace PvP
 {
-    public enum RangedWeapon
+    public enum Weapon
     {
+        Punch,
         Sling,
         Bow,
         Crossbow,
         Matchlockgun
     }
-
 
 
     [ModLoader.ModManager]
@@ -29,6 +29,68 @@ namespace PvP
                 TryShoot(player, data);
             else
                 TryPunch(player, data);
+        }
+
+
+        //READ: https://discord.com/channels/345192439323033601/345214873082527756/835464495744417812
+                                                            //PUNCH, SLING, BOW, CROSSB, MATCHLOCK
+        public static readonly long[] TimeBetweenAttacks = { 0, 1000L, 1500L, 2500L, 3000L };
+
+        //PUNCH, SLING, BOW, CROSSB, MATCHLOCK
+        //REAL DAMAGE
+        //public static readonly float[] AttackDamage = { 35f, 50f, 100f, 300f, 500f };
+        public static readonly float[] AttackDamage = { 25f, 25f, 50f, 75f, 100f };
+
+        public static Dictionary<(Players.Player, Weapon), ServerTimeStamp> LastShoot = new Dictionary<(Players.Player, Weapon), ServerTimeStamp>();
+
+        public static void TryShoot(Players.Player player, PlayerClickedData data)
+        {
+            //Chatting.Chat.SendToConnected("Player Tries to shoot");
+
+            if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.sling)
+            {
+                //TIME BETWEEM shoots
+                if (LastShoot.TryGetValue((player, Weapon.Sling), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)Weapon.Sling])
+                    return;
+
+                LastShoot[(player, Weapon.Sling)] = ServerTimeStamp.Now;
+
+                projectiles.Add(new Projectile(ProjectileType.Sling, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                //Chatting.Chat.SendToConnected("Sling shoot: " + player.Position);
+            }
+            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.bow)
+            {
+                //TIME BETWEEM shoots
+                if (LastShoot.TryGetValue((player, Weapon.Bow), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)Weapon.Bow])
+                    return;
+
+                LastShoot[(player, Weapon.Bow)] = ServerTimeStamp.Now;
+
+                projectiles.Add(new Projectile(ProjectileType.Arrow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                //Chatting.Chat.SendToConnected("Bow shoot: " + player.Position);
+            }
+            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.crossbow)
+            {
+                //TIME BETWEEM shoots
+                if (LastShoot.TryGetValue((player, Weapon.Crossbow), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)Weapon.Crossbow])
+                    return;
+
+                LastShoot[(player, Weapon.Crossbow)] = ServerTimeStamp.Now;
+
+                projectiles.Add(new Projectile(ProjectileType.Crossbow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                //Chatting.Chat.SendToConnected("Crossbow shoot: " + player.Position);
+            }
+            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.matchlockgun)
+            {
+                //TIME BETWEEM shoots
+                if (LastShoot.TryGetValue((player, Weapon.Matchlockgun), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)Weapon.Matchlockgun])
+                    return;
+
+                LastShoot[(player, Weapon.Matchlockgun)] = ServerTimeStamp.Now;
+
+                projectiles.Add(new Projectile(ProjectileType.Matchlock, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                //Chatting.Chat.SendToConnected("Matchlockgun shoot: " + player.Position);
+            }
         }
 
         public static void TryPunch(Players.Player player, PlayerClickedData data)
@@ -57,66 +119,10 @@ namespace PvP
 
                 if (playerBounds.IntersectRay(ray))
                 {
-                    Chatting.Chat.SendToConnected(player.Name + " hits " + pl.Name);
+                    //Chatting.Chat.SendToConnected(player.Name + " hits " + pl.Name);
+                    AttackPlayer(pl, AttackDamage[(int)Weapon.Punch]);
                     break;
                 }
-            }
-        }
-
-        public static readonly long SlingerShotCooldown = 1000L;
-        public static readonly long BowShotCooldown = 1500L;
-        public static readonly long CrossbowShotCooldown = 2500L;
-        public static readonly long MatchlockShotCooldown = 3000L;
-
-        public static Dictionary<(Players.Player, RangedWeapon), ServerTimeStamp> LastShoot = new Dictionary<(Players.Player, RangedWeapon), ServerTimeStamp>();
-
-        public static void TryShoot(Players.Player player, PlayerClickedData data)
-        {
-            Chatting.Chat.SendToConnected("Player Tries to shoot");
-
-            if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.sling)
-            {
-                //TIME BETWEEM shoots
-                if (LastShoot.TryGetValue((player, RangedWeapon.Sling), out ServerTimeStamp value) && value.TimeSinceThis < SlingerShotCooldown)
-                    return;
-
-                LastShoot[(player, RangedWeapon.Sling)] = ServerTimeStamp.Now;
-
-                projectiles.Add(new Projectile(ProjectileType.Sling, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                Chatting.Chat.SendToConnected("Sling shoot: " + player.Position);
-            }
-            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.bow)
-            {
-                //TIME BETWEEM shoots
-                if (LastShoot.TryGetValue((player, RangedWeapon.Bow), out ServerTimeStamp value) && value.TimeSinceThis < BowShotCooldown)
-                    return;
-
-                LastShoot[(player, RangedWeapon.Bow)] = ServerTimeStamp.Now;
-
-                projectiles.Add(new Projectile(ProjectileType.Arrow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                Chatting.Chat.SendToConnected("Bow shoot: " + player.Position);
-            }
-            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.crossbow)
-            {
-                //TIME BETWEEM shoots
-                if (LastShoot.TryGetValue((player, RangedWeapon.Crossbow), out ServerTimeStamp value) && value.TimeSinceThis < CrossbowShotCooldown)
-                    return;
-
-                LastShoot[(player, RangedWeapon.Crossbow)] = ServerTimeStamp.Now;
-
-                projectiles.Add(new Projectile(ProjectileType.Crossbow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                Chatting.Chat.SendToConnected("Crossbow shoot: " + player.Position);
-            }
-            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.matchlockgun)
-            {
-                //TIME BETWEEM shoots
-                if (LastShoot.TryGetValue((player, RangedWeapon.Matchlockgun), out ServerTimeStamp value) && value.TimeSinceThis < MatchlockShotCooldown)
-                    return;
-
-                LastShoot[(player, RangedWeapon.Matchlockgun)] = ServerTimeStamp.Now;
-
-                projectiles.Add(new Projectile(ProjectileType.Matchlock, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                Chatting.Chat.SendToConnected("Matchlockgun shoot: " + player.Position);
             }
         }
 
@@ -124,6 +130,7 @@ namespace PvP
         private static ServerTimeStamp nextUpdate;
         private static readonly long timeBetweenUpdates = 200L;
 
+        //This method detects projectile collision
         [ModLoader.ModCallback(ModLoader.EModCallbackType.OnUpdate, "Khanx.PvP.OnUpdate")]
         public static void OnUpdate()
         {
@@ -138,6 +145,14 @@ namespace PvP
 
             nextUpdate = ServerTimeStamp.Now;
 
+            /*  Explanation:
+                1- Check block collision
+                2- Check monster collision
+                3- Check colonist collision
+                4- Check player collision
+
+                //Player collision DON'T remove the projectile
+             */
             for (int i = projectiles.Count - 1; i >= 0; i--)
             {
                 Projectile projectile = projectiles[i];
@@ -152,7 +167,7 @@ namespace PvP
                 //Zun recommends: if (!VoxelPhysics.CanSee(position, nextPosition)) { ... hit something ... }
                 if (!VoxelPhysics.CanSee(projectile.lastPosition, nextPosition))
                 {
-                    Chatting.Chat.SendToConnected("Hits SOMETHING");
+                    //Chatting.Chat.SendToConnected("Hits SOMETHING");
                     projectiles.RemoveAt(i);
                     continue;
                 }
@@ -178,7 +193,7 @@ namespace PvP
 
                     if (monsterBounds.IntersectRay(ray))
                     {
-                        Chatting.Chat.SendToConnected("Hits Zombie: " + monster.Position);
+                        //Chatting.Chat.SendToConnected("Hits Zombie: " + monster.Position);
                         projectiles.RemoveAt(i);
                         continue;
                     }
@@ -191,7 +206,7 @@ namespace PvP
 
                     if (npcBounds.IntersectRay(ray))
                     {
-                        Chatting.Chat.SendToConnected("Hits NPC: " + npc.Position);
+                        //Chatting.Chat.SendToConnected("Hits NPC: " + npc.Position);
                         projectiles.RemoveAt(i);
                         continue;
                     }
@@ -213,7 +228,15 @@ namespace PvP
 
                     if (playerBounds.IntersectRay(ray))
                     {
-                        Chatting.Chat.SendToConnected(Players.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
+                        //Chatting.Chat.SendToConnected(Players.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
+                        
+                        switch(projectile.projectileType)
+                        {
+                            case ProjectileType.Sling:      AttackPlayer(pl, AttackDamage[(int)Weapon.Sling]);          break;
+                            case ProjectileType.Arrow:      AttackPlayer(pl, AttackDamage[(int)Weapon.Bow]);            break;
+                            case ProjectileType.Crossbow:   AttackPlayer(pl, AttackDamage[(int)Weapon.Crossbow]);       break;
+                            case ProjectileType.Matchlock:  AttackPlayer(pl, AttackDamage[(int)Weapon.Matchlockgun]);   break;
+                        }
                         break;
                     }
                 }
@@ -223,6 +246,25 @@ namespace PvP
             }
         }
 
+        public static void AttackPlayer(Players.Player attacked, float damage)
+        {
+            float damageModifier = 1;
+
+            foreach(var i in attacked.Inventory.Items)
+            {
+                switch (i.Type)
+                {
+                    //Light armor
+                    case 0:     damageModifier = 0.25f;     break;
+                    //Medium armor
+                    case 1:     damageModifier = 0.50f;     break;
+                    //Heavy armor
+                    case 2:     damageModifier = 0.75f;     break;
+                }
+            }
+
+            Players.TakeHit(attacked, damage * damageModifier);
+        }
 
         /*
          * IF player makes LEFT click & consumes ammo (slingbullet, bronzearrow, crossbowbolt, leadbullet)
