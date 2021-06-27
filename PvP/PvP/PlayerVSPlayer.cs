@@ -7,10 +7,20 @@ namespace PvP
     public enum Weapon
     {
         Punch,
+        BronzeSword,
+        IronSword,
+        SteelSword,
+        BronzeSpear,
+        IronSpear,
+        SteelSpear,
+        BronzeMace,
+        IronMace,
+        SteelMace,
         Sling,
         Bow,
         Crossbow,
-        Matchlockgun
+        Matchlockgun,
+        MAX
     }
 
 
@@ -34,12 +44,54 @@ namespace PvP
 
         //READ: https://discord.com/channels/345192439323033601/345214873082527756/835464495744417812
                                                             //PUNCH, SLING, BOW, CROSSB, MATCHLOCK
-        public static readonly long[] TimeBetweenAttacks = { 0, 1000L, 1500L, 2500L, 3000L };
+        public static readonly long[] TimeBetweenAttacks = new long[(int)Weapon.MAX];// { 500L, 1000L, 1500L, 2500L, 3000L };
 
-        //PUNCH, SLING, BOW, CROSSB, MATCHLOCK
         //REAL DAMAGE
         //public static readonly float[] AttackDamage = { 35f, 50f, 100f, 300f, 500f };
-        public static readonly float[] AttackDamage = { 25f, 25f, 50f, 75f, 100f };
+        public static readonly float[] AttackDamage = new float[(int)Weapon.MAX];
+
+
+        [ModLoader.ModCallback(ModLoader.EModCallbackType.AfterWorldLoad, "Khanx.PvP.AfterWorldLoad")]
+        public static void Initialize()
+        {
+            TimeBetweenAttacks[(int)Weapon.Punch] = 500L;
+
+            TimeBetweenAttacks[(int)Weapon.BronzeSword]     = 500L;
+            TimeBetweenAttacks[(int)Weapon.IronSword]       = 500L;
+            TimeBetweenAttacks[(int)Weapon.SteelSword]      = 500L;
+
+            TimeBetweenAttacks[(int)Weapon.BronzeSpear]     = 500L;
+            TimeBetweenAttacks[(int)Weapon.IronSpear]       = 500L;
+            TimeBetweenAttacks[(int)Weapon.SteelSpear]      = 500L;
+
+            TimeBetweenAttacks[(int)Weapon.BronzeMace]      = 1000L;
+            TimeBetweenAttacks[(int)Weapon.IronMace]        = 1000L;
+            TimeBetweenAttacks[(int)Weapon.SteelMace]       = 1000L;
+
+            TimeBetweenAttacks[(int)Weapon.Sling]           = 1000L;
+            TimeBetweenAttacks[(int)Weapon.Bow]             = 1500L;
+            TimeBetweenAttacks[(int)Weapon.Crossbow]        = 2500;
+            TimeBetweenAttacks[(int)Weapon.Matchlockgun]    = 3000L;
+
+            AttackDamage[(int)Weapon.Punch]                 = 20f;
+
+            AttackDamage[(int)Weapon.BronzeSword]           = 50f;
+            AttackDamage[(int)Weapon.IronSword]             = 75f;
+            AttackDamage[(int)Weapon.SteelSword]            = 100f;
+
+            AttackDamage[(int)Weapon.BronzeSpear]           = 25f;
+            AttackDamage[(int)Weapon.IronSpear]             = 50f;
+            AttackDamage[(int)Weapon.SteelSpear]            = 75f;
+
+            AttackDamage[(int)Weapon.BronzeMace]            = 100f;
+            AttackDamage[(int)Weapon.IronMace]              = 150f;
+            AttackDamage[(int)Weapon.SteelMace]             = 200f;
+
+            AttackDamage[(int)Weapon.Sling]                 = 50f;
+            AttackDamage[(int)Weapon.Bow]                   = 75f;
+            AttackDamage[(int)Weapon.Crossbow]              = 150f;
+            AttackDamage[(int)Weapon.Matchlockgun]          = 200f;
+        }
 
         public static Dictionary<(Players.Player, Weapon), ServerTimeStamp> LastShoot = new Dictionary<(Players.Player, Weapon), ServerTimeStamp>();
 
@@ -95,11 +147,35 @@ namespace PvP
 
         public static void TryPunch(Players.Player player, PlayerClickedData data)
         {
-            //TIME BETWEEM punchs
-            if (Players.LastPunches.TryGetValue(player, out ServerTimeStamp value) && value.TimeSinceThis < Players.PlayerPunchCooldownMS)
+            Weapon weapon = Weapon.Punch;
+
+            switch(data.TypeSelected)
+            {
+                //Bronze Sword
+                case 0: weapon = Weapon.Punch; break;
+                //Iron Sword
+                case 1: weapon = Weapon.Punch; break;
+                //Steel Sword
+                case 2: weapon = Weapon.Punch; break;
+                //Bronze Spear
+                case 3: weapon = Weapon.Punch; break;
+                //Iron Spear
+                case 4: weapon = Weapon.Punch; break;
+                //Steel Spear
+                case 5: weapon = Weapon.Punch; break;
+                //Bonze Mace
+                case 6: weapon = Weapon.Punch; break;
+                //Iron Mace
+                case 7: weapon = Weapon.Punch; break;
+                //Steel Mace
+                case 8: weapon = Weapon.Punch; break;
+            }
+
+            //TIME BETWEEM shoots
+            if (LastShoot.TryGetValue((player, weapon), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)weapon])
                 return;
 
-            Players.LastPunches[player] = ServerTimeStamp.Now;
+            LastShoot[(player, weapon)] = ServerTimeStamp.Now;
 
             Ray ray = new Ray(data.PlayerEyePosition, data.PlayerAimDirection);
             //ServerManager.SendParticleTrail(data.PlayerEyePosition + data.PlayerAimDirection * 3, data.PlayerEyePosition - data.PlayerAimDirection * 3, 5);
