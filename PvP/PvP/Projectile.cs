@@ -26,10 +26,10 @@ namespace PvP
             this.shootTimeMS = ServerTimeStamp.Now;
             this.shooter = shooter;
 
-            switch(projectileType)
+            switch (projectileType)
             {
-                case ProjectileType.Sling:  this.velocity = direction * SlingerForce;   break;
-                case ProjectileType.Arrow:  this.velocity = direction * BowForce; break;
+                case ProjectileType.Sling: this.velocity = direction * SlingerForce; break;
+                case ProjectileType.Arrow: this.velocity = direction * BowForce; break;
                 case ProjectileType.Crossbow: this.velocity = direction * CrossbowForce; break;
                 case ProjectileType.Matchlock: this.velocity = direction * MatchlockForce; break;
                 default: this.velocity = Vector3.zero; break;

@@ -43,10 +43,10 @@ namespace PvP
 
 
         //READ: https://discord.com/channels/345192439323033601/345214873082527756/835464495744417812
-                                                            //PUNCH, SLING, BOW, CROSSB, MATCHLOCK
-        public static readonly long[] TimeBetweenAttacks = new long[(int)Weapon.MAX];// { 500L, 1000L, 1500L, 2500L, 3000L };
+        public static readonly long[] TimeBetweenAttacks = new long[(int)Weapon.MAX];
 
         //REAL DAMAGE
+        //PUNCH, SLING, BOW, CROSSB, MATCHLOCK
         //public static readonly float[] AttackDamage = { 35f, 50f, 100f, 300f, 500f };
         public static readonly float[] AttackDamage = new float[(int)Weapon.MAX];
 
@@ -54,7 +54,7 @@ namespace PvP
         [ModLoader.ModCallback(ModLoader.EModCallbackType.AfterWorldLoad, "Khanx.PvP.AfterWorldLoad")]
         public static void Initialize()
         {
-            TimeBetweenAttacks[(int)Weapon.Punch] = 500L;
+            TimeBetweenAttacks[(int)Weapon.Punch]           = 500L;
 
             TimeBetweenAttacks[(int)Weapon.BronzeSword]     = 500L;
             TimeBetweenAttacks[(int)Weapon.IronSword]       = 500L;
@@ -149,7 +149,7 @@ namespace PvP
         {
             Weapon weapon = Weapon.Punch;
 
-            switch(data.TypeSelected)
+            switch (data.TypeSelected)
             {
                 //Bronze Sword
                 case 0: weapon = Weapon.Punch; break;
@@ -305,13 +305,13 @@ namespace PvP
                     if (playerBounds.IntersectRay(ray))
                     {
                         //Chatting.Chat.SendToConnected(Players.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
-                        
-                        switch(projectile.projectileType)
+
+                        switch (projectile.projectileType)
                         {
-                            case ProjectileType.Sling:      AttackPlayer(pl, AttackDamage[(int)Weapon.Sling]);          break;
-                            case ProjectileType.Arrow:      AttackPlayer(pl, AttackDamage[(int)Weapon.Bow]);            break;
-                            case ProjectileType.Crossbow:   AttackPlayer(pl, AttackDamage[(int)Weapon.Crossbow]);       break;
-                            case ProjectileType.Matchlock:  AttackPlayer(pl, AttackDamage[(int)Weapon.Matchlockgun]);   break;
+                            case ProjectileType.Sling: AttackPlayer(pl, AttackDamage[(int)Weapon.Sling]); break;
+                            case ProjectileType.Arrow: AttackPlayer(pl, AttackDamage[(int)Weapon.Bow]); break;
+                            case ProjectileType.Crossbow: AttackPlayer(pl, AttackDamage[(int)Weapon.Crossbow]); break;
+                            case ProjectileType.Matchlock: AttackPlayer(pl, AttackDamage[(int)Weapon.Matchlockgun]); break;
                         }
                         break;
                     }
@@ -326,28 +326,28 @@ namespace PvP
         {
             float damageModifier = 1;
 
-            foreach(var i in attacked.Inventory.Items)
+            foreach (var i in attacked.Inventory.Items)
             {
                 switch (i.Type)
                 {
                     //Light armor
                     case 0:
                         //The if works to use the BEST armor in the inventory
-                        if(damageModifier == 1)
+                        if (damageModifier == 1)
                             damageModifier = 0.25f;
-                    break;
+                        break;
 
                     //Medium armor
                     case 1:
-                        if (damageModifier == 1 || damageModifier <0.5f)
+                        if (damageModifier == 1 || damageModifier < 0.5f)
                             damageModifier = 0.50f;
-                    break;
+                        break;
 
                     //Heavy armor
                     case 2:
                         if (damageModifier == 1 || damageModifier < 0.75f)
                             damageModifier = 0.75f;
-                    break;
+                        break;
                 }
             }
 
