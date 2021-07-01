@@ -70,7 +70,7 @@ namespace PvP
 
             TimeBetweenAttacks[(int)Weapon.Sling]           = 1000L;
             TimeBetweenAttacks[(int)Weapon.Bow]             = 1500L;
-            TimeBetweenAttacks[(int)Weapon.Crossbow]        = 2500;
+            TimeBetweenAttacks[(int)Weapon.Crossbow]        = 2500L;
             TimeBetweenAttacks[(int)Weapon.Matchlockgun]    = 3000L;
 
             AttackDamage[(int)Weapon.Punch]                 = 20f;

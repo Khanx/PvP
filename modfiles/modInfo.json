@@ -8,6 +8,26 @@
 		"compatibleversions":
 			[
 				"0.8.1"
-			]
+			],
+		"jsonFiles" : [
+			{
+				"relativePath" : "./gamedata/types.json",
+				"fileType" : "addNewTypes",
+				"index" : -1000000
+			},
+			{
+				"relativePath" : "./gamedata/recipes.json",
+				"fileType" : "addOrReplacePlayerRecipes",
+				"index" : -1000000,
+			},
+			{
+				"fileType": "addOrOverrideLocalization",
+				"relativePath": "gamedata/localization/en-US/en-US.json"
+			},
+			{
+				"fileType": "addOrOverrideLocalization",
+				"relativePath": "gamedata/localization/es-ES/es-ES.json"
+			}
+		]
 	}
 ]

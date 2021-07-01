@@ -1,0 +1,98 @@
+{
+  "Khanx.PvPBronzeSword" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/bronzesword.png"
+  },
+  "Khanx.PvPIronSword" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/ironsword.png"
+  },
+  "Khanx.PvPSteelSword" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/steelsword.png"
+  },
+  "Khanx.PvPBronzeSpear" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/bronzespear.png"
+  },
+  "Khanx.PvPIronSpear" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/ironspear.png"
+  },
+  "Khanx.PvPSteelSpear" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/steelspear.png"
+  },
+  "Khanx.PvPBronzeMace" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/compass.png"
+  },
+  "Khanx.PvPIronMace" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/compass.png"
+  },
+  "Khanx.PvPSteelMace" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/compass.png"
+  },
+  "Khanx.PvPClothArmor" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/compass.png"
+  },
+  "Khanx.PvPChainArmor" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/compass.png"
+  },
+  "Khanx.PvPPlateArmor" : {
+    "categories" : [
+	  "khanx",
+	  "pvp"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/compass.png"
+  }
+}
