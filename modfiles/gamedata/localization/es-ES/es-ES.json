@@ -1,0 +1,38 @@
+{
+	"types":
+	{
+		"Khanx.PvPBronzeSword": "Espada de Bronce (PvP)",
+		"Khanx.PvPIronSword": "Espada de Hierro (PvP)",
+		"Khanx.PvPSteelSword": "Espada de Acero (PvP)",
+		
+		"Khanx.PvPBronzeSpear": "Lanza de Bronce (PvP)",
+		"Khanx.PvPIronSpear": "Lanza de Hierro (PvP)",
+		"Khanx.PvPSteelSpear": "Lanza de Acero (PvP)",
+		
+		"Khanx.PvPBronzeMace": "Maza de Bronce (PvP)",
+		"Khanx.PvPIronMace": "Maza de Hierro (PvP)",
+		"Khanx.PvPSteelMace": "Maza de Acero (PvP)",
+		
+		"Khanx.PvPClothArmor": "Armadura de Tela (PvP)",
+		"Khanx.PvPChainArmor": "Armadura de Cota de Malla (PvP)",
+		"Khanx.PvPPlateArmor": "Armadura de Placas de Acero (PvP)"
+	},
+	"typeuses":
+	{
+		"Khanx.PvPBronzeSword": "Daño: 50\n Cooldown: 0,5s\n Rango: 2 blocks",
+		"Khanx.PvPIronSword": "Daño: 75\n Cooldown: 0,5s\n Rango: 2 blocks",
+		"Khanx.PvPSteelSword": "Daño: 100\n Cooldown: 0,5s\n Rango: 2 blocks",
+		
+		"Khanx.PvPBronzeSpear": "Daño: 25\n Cooldown: 0,5s\n Rango: 4 blocks",
+		"Khanx.PvPIronSpear": "Daño: 50\n Cooldown: 0,5s\n Rango: 4 blocks",
+		"Khanx.PvPSteelSpear": "Daño: 75\n Cooldown: 0,5s\n Rango: 4 blocks",
+		
+		"Khanx.PvPBronzeMace": "Daño: 100\n Cooldown: 1s\n Rango: 2 blocks",
+		"Khanx.PvPIronMace": "Daño: 150\n Cooldown: 1s\n Rango: 2 blocks",
+		"Khanx.PvPSteelMace": "Daño: 200\n Cooldown: 1s\n Rango: 2 blocks",
+		
+		"Khanx.PvPClothArmor": "La armadura de Tela, también conocida como Gambesón, reduce el daño de PvP en un 25%.",
+		"Khanx.PvPChainArmor": "La armadura de Cota de Malla, también conocida como Haurberk, reduce el daño de PvP en un 50%.",
+		"Khanx.PvPPlateArmor": "La armadura de Placas de Acero, también conocida como Armadura Completa, reduce el daño de PvP en un 75%.",
+	}
+}

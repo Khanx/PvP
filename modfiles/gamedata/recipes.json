@@ -1,0 +1,13 @@
+[
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPIronSword",
+		"requires" : [
+			{"amount":4,"type":"ironingot"},
+		],
+		"results" : [
+			{"type":"Khanx.PvPBronzeSword"}
+		]
+	}
+]

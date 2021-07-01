@@ -1,0 +1,38 @@
+{
+	"types":
+	{
+		"Khanx.PvPBronzeSword": "Bronze Sword (PvP)",
+		"Khanx.PvPIronSword": "Iron Sword (PvP)",
+		"Khanx.PvPSteelSword": "Steel Sword (PvP)",
+		
+		"Khanx.PvPBronzeSpear": "Bronze Spear (PvP)",
+		"Khanx.PvPIronSpear": "Iron Spear (PvP)",
+		"Khanx.PvPSteelSpear": "Steel Spear (PvP)",
+		
+		"Khanx.PvPBronzeMace": "Bronze Mace (PvP)",
+		"Khanx.PvPIronMace": "Iron Mace (PvP)",
+		"Khanx.PvPSteelMace": "Steel Mace (PvP)",
+		
+		"Khanx.PvPClothArmor": "Cloth Padded Armor (PvP)",
+		"Khanx.PvPChainArmor": "Chain Mail Armor (PvP)",
+		"Khanx.PvPPlateArmor": "Plate Armor (PvP)"
+	},
+	"typeuses":
+	{
+		"Khanx.PvPBronzeSword": "Damage: 50\n Cooldown: 0,5s\n Range: 2 blocks",
+		"Khanx.PvPIronSword": "Damage: 75\n Cooldown: 0,5s\n Range: 2 blocks",
+		"Khanx.PvPSteelSword": "Damage: 100\n Cooldown: 0,5s\n Range: 2 blocks",
+		
+		"Khanx.PvPBronzeSpear": "Damage: 25\n Cooldown: 0,5s\n Range: 4 blocks",
+		"Khanx.PvPIronSpear": "Damage: 50\n Cooldown: 0,5s\n Range: 4 blocks",
+		"Khanx.PvPSteelSpear": "Damage: 75\n Cooldown: 0,5s\n Range: 4 blocks",
+		
+		"Khanx.PvPBronzeMace": "Damage: 100\n Cooldown: 1s\n Range: 2 blocks",
+		"Khanx.PvPIronMace": "Damage: 150\n Cooldown: 1s\n Range: 2 blocks",
+		"Khanx.PvPSteelMace": "Damage: 200\n Cooldown: 1s\n Range: 2 blocks",
+		
+		"Khanx.PvPClothArmor": "The Cloth Padded Armor, also known as Gamberson, reduces PvP damage by 25%.",
+		"Khanx.PvPChainArmor": "The Chain Mail Armor, also known as Haubergon, reduces PvP damage by 50%.",
+		"Khanx.PvPPlateArmor": "The Plate Armor reduces, also known as Full Armor, PvP damage by 75%."
+	}
+}
