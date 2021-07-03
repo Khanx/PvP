@@ -91,6 +91,10 @@ namespace PvP
             AttackDamage[(int)Weapon.Bow]                   = 75f;
             AttackDamage[(int)Weapon.Crossbow]              = 150f;
             AttackDamage[(int)Weapon.Matchlockgun]          = 200f;
+
+            armorType[0] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPClothArmor");
+            armorType[1] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPChainArmor");
+            armorType[2] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPPlateArmor");
         }
 
         public static Dictionary<(Players.Player, Weapon), ServerTimeStamp> LastShoot = new Dictionary<(Players.Player, Weapon), ServerTimeStamp>();
@@ -322,32 +326,28 @@ namespace PvP
             }
         }
 
+        public static ushort[] armorType = new ushort[4];
+
         public static void AttackPlayer(Players.Player attacked, float damage)
         {
             float damageModifier = 1;
 
             foreach (var i in attacked.Inventory.Items)
             {
-                switch (i.Type)
+                if (i.Type == armorType[0]) //PvPClothArmor
                 {
-                    //Light armor
-                    case 0:
-                        //The if works to use the BEST armor in the inventory
-                        if (damageModifier == 1)
-                            damageModifier = 0.25f;
-                        break;
+                    if(damageModifier == 1)
+                        damageModifier = 0.25f;
 
-                    //Medium armor
-                    case 1:
-                        if (damageModifier == 1 || damageModifier < 0.5f)
-                            damageModifier = 0.50f;
-                        break;
-
-                    //Heavy armor
-                    case 2:
-                        if (damageModifier == 1 || damageModifier < 0.75f)
-                            damageModifier = 0.75f;
-                        break;
+                } else if (i.Type == armorType[1])  //PvPChainArmor
+                {
+                    if (damageModifier == 1f || damageModifier < 0.5f)
+                        damageModifier = 0.5f;
+                }
+                else if(i.Type == armorType[2]) //PvPPlateArmor
+                {
+                    if (damageModifier == 1f || damageModifier < 0.75f)
+                        damageModifier = 0.57f;
                 }
             }
 
