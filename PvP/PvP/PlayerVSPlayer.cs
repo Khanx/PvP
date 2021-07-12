@@ -43,13 +43,12 @@ namespace PvP
 
 
         //READ: https://discord.com/channels/345192439323033601/345214873082527756/835464495744417812
+        
         public static readonly long[] TimeBetweenAttacks = new long[(int)Weapon.MAX];
-
-        //REAL DAMAGE
-        //PUNCH, SLING, BOW, CROSSB, MATCHLOCK
-        //public static readonly float[] AttackDamage = { 35f, 50f, 100f, 300f, 500f };
+        //Official damange: PUNCH = 35, SLING = 50, BOW = 100, CROSSBOW = 300, MATCHLOCK = 500
         public static readonly float[] AttackDamage = new float[(int)Weapon.MAX];
-
+        public static readonly ushort[] armorType = new ushort[4];
+        public static readonly Dictionary<ushort, Weapon> type2Weapon = new Dictionary<ushort, Weapon>(9);
 
         [ModLoader.ModCallback(ModLoader.EModCallbackType.AfterWorldLoad, "Khanx.PvP.AfterWorldLoad")]
         public static void Initialize()
@@ -68,6 +67,7 @@ namespace PvP
             TimeBetweenAttacks[(int)Weapon.IronMace]        = 1000L;
             TimeBetweenAttacks[(int)Weapon.SteelMace]       = 1000L;
 
+            //The time of the ranged weapon cannot be modified
             TimeBetweenAttacks[(int)Weapon.Sling]           = 1000L;
             TimeBetweenAttacks[(int)Weapon.Bow]             = 1500L;
             TimeBetweenAttacks[(int)Weapon.Crossbow]        = 2500L;
@@ -95,6 +95,18 @@ namespace PvP
             armorType[0] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPClothArmor");
             armorType[1] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPChainArmor");
             armorType[2] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPPlateArmor");
+
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPBronzeSword"), Weapon.BronzeSword);
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPIronSword"), Weapon.IronSword);
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPSteelSword"), Weapon.SteelSword);
+
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPBronzeSpear"), Weapon.BronzeSpear);
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPIronSpear"), Weapon.IronSpear);
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPSteelSpear"), Weapon.SteelSpear);
+
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPBronzeMace"), Weapon.BronzeMace);
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPIronMace"), Weapon.IronMace);
+            type2Weapon.Add(ItemTypes.IndexLookup.GetIndex("Khanx.PvPSteelMace"), Weapon.SteelMace);
         }
 
         public static Dictionary<(Players.Player, Weapon), ServerTimeStamp> LastShoot = new Dictionary<(Players.Player, Weapon), ServerTimeStamp>();
@@ -151,29 +163,8 @@ namespace PvP
 
         public static void TryPunch(Players.Player player, PlayerClickedData data)
         {
-            Weapon weapon = Weapon.Punch;
-
-            switch (data.TypeSelected)
-            {
-                //Bronze Sword
-                case 0: weapon = Weapon.Punch; break;
-                //Iron Sword
-                case 1: weapon = Weapon.Punch; break;
-                //Steel Sword
-                case 2: weapon = Weapon.Punch; break;
-                //Bronze Spear
-                case 3: weapon = Weapon.Punch; break;
-                //Iron Spear
-                case 4: weapon = Weapon.Punch; break;
-                //Steel Spear
-                case 5: weapon = Weapon.Punch; break;
-                //Bonze Mace
-                case 6: weapon = Weapon.Punch; break;
-                //Iron Mace
-                case 7: weapon = Weapon.Punch; break;
-                //Steel Mace
-                case 8: weapon = Weapon.Punch; break;
-            }
+            if (!type2Weapon.TryGetValue(data.TypeSelected, out Weapon weapon))
+                weapon = Weapon.Punch;
 
             //TIME BETWEEM shoots
             if (LastShoot.TryGetValue((player, weapon), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)weapon])
@@ -325,8 +316,6 @@ namespace PvP
                 projectiles[i] = projectile;
             }
         }
-
-        public static ushort[] armorType = new ushort[4];
 
         public static void AttackPlayer(Players.Player attacked, float damage)
         {
