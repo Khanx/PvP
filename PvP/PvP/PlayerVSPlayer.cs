@@ -183,7 +183,13 @@ namespace PvP
                 if (pl.Equals(player))
                     continue;
 
-                if (Vector3.Distance(pl.Position, player.Position) > 2)
+                int hitDistance = 2;
+
+                //spear can attack from further
+                if (weapon == Weapon.BronzeSpear || weapon == Weapon.IronSpear || weapon == Weapon.SteelSpear)
+                    hitDistance = 4;
+
+                if (Vector3.Distance(pl.Position, player.Position) > hitDistance)
                     continue;
 
                 Bounds playerBounds = new Bounds(pl.Position + new Vector3(0, 0.5f, 0), new Vector3(1.25f, 2.25f, 0.5f));
@@ -191,7 +197,7 @@ namespace PvP
                 if (playerBounds.IntersectRay(ray))
                 {
                     //Chatting.Chat.SendToConnected(player.Name + " hits " + pl.Name);
-                    AttackPlayer(pl, AttackDamage[(int)Weapon.Punch]);
+                    AttackPlayer(pl, player.ID, AttackDamage[(int)Weapon.Punch]);
                     break;
                 }
             }
@@ -303,10 +309,10 @@ namespace PvP
 
                         switch (projectile.projectileType)
                         {
-                            case ProjectileType.Sling: AttackPlayer(pl, AttackDamage[(int)Weapon.Sling]); break;
-                            case ProjectileType.Arrow: AttackPlayer(pl, AttackDamage[(int)Weapon.Bow]); break;
-                            case ProjectileType.Crossbow: AttackPlayer(pl, AttackDamage[(int)Weapon.Crossbow]); break;
-                            case ProjectileType.Matchlock: AttackPlayer(pl, AttackDamage[(int)Weapon.Matchlockgun]); break;
+                            case ProjectileType.Sling: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Sling]); break;
+                            case ProjectileType.Arrow: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Bow]); break;
+                            case ProjectileType.Crossbow: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Crossbow]); break;
+                            case ProjectileType.Matchlock: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Matchlockgun]); break;
                         }
                         break;
                     }
@@ -317,7 +323,7 @@ namespace PvP
             }
         }
 
-        public static void AttackPlayer(Players.Player attacked, float damage)
+        public static void AttackPlayer(Players.Player attacked, NetworkID attacker, float damage)
         {
             float damageModifier = 1;
 
@@ -340,7 +346,10 @@ namespace PvP
                 }
             }
 
-            Players.TakeHit(attacked, damage * damageModifier);
+           if(Players.TryGetPlayer(attacker, out Players.Player pl))
+                Players.TakeHit(attacked, damage * damageModifier, pl, ModLoader.OnHitData.EHitSourceType.PlayerClick);
+           else
+                Players.TakeHit(attacked, damage * damageModifier, null, ModLoader.OnHitData.EHitSourceType.PlayerClick);
         }
 
         /*
