@@ -38,7 +38,7 @@ namespace PvP
             if (data.IsConsumed && data.ConsumedType == PlayerClickedData.EConsumedType.UsedAsTool)
                 TryShoot(player, data);
             else
-                TryPunch(player, data);
+                TryMele(player, data);
         }
 
 
@@ -113,8 +113,6 @@ namespace PvP
 
         public static void TryShoot(Players.Player player, PlayerClickedData data)
         {
-            //Chatting.Chat.SendToConnected("Player Tries to shoot");
-
             if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.sling)
             {
                 //TIME BETWEEM shoots
@@ -124,7 +122,9 @@ namespace PvP
                 LastShoot[(player, Weapon.Sling)] = ServerTimeStamp.Now;
 
                 projectiles.Add(new Projectile(ProjectileType.Sling, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                //Chatting.Chat.SendToConnected("Sling shoot: " + player.Position);
+#if DEBUG
+                Chatting.Chat.SendToConnected("Sling shoot: " + player.Position);
+#endif
             }
             else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.bow)
             {
@@ -135,7 +135,9 @@ namespace PvP
                 LastShoot[(player, Weapon.Bow)] = ServerTimeStamp.Now;
 
                 projectiles.Add(new Projectile(ProjectileType.Arrow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                //Chatting.Chat.SendToConnected("Bow shoot: " + player.Position);
+#if DEBUG
+                Chatting.Chat.SendToConnected("Bow shoot: " + player.Position);
+#endif
             }
             else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.crossbow)
             {
@@ -146,7 +148,9 @@ namespace PvP
                 LastShoot[(player, Weapon.Crossbow)] = ServerTimeStamp.Now;
 
                 projectiles.Add(new Projectile(ProjectileType.Crossbow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                //Chatting.Chat.SendToConnected("Crossbow shoot: " + player.Position);
+#if DEBUG
+                Chatting.Chat.SendToConnected("Crossbow shoot: " + player.Position);
+#endif
             }
             else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.matchlockgun)
             {
@@ -157,11 +161,13 @@ namespace PvP
                 LastShoot[(player, Weapon.Matchlockgun)] = ServerTimeStamp.Now;
 
                 projectiles.Add(new Projectile(ProjectileType.Matchlock, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
-                //Chatting.Chat.SendToConnected("Matchlockgun shoot: " + player.Position);
+#if DEBUG
+                Chatting.Chat.SendToConnected("Matchlockgun shoot: " + player.Position);
+#endif
             }
         }
 
-        public static void TryPunch(Players.Player player, PlayerClickedData data)
+        public static void TryMele(Players.Player player, PlayerClickedData data)
         {
             if (!type2Weapon.TryGetValue(data.TypeSelected, out Weapon weapon))
                 weapon = Weapon.Punch;
@@ -173,12 +179,16 @@ namespace PvP
             LastShoot[(player, weapon)] = ServerTimeStamp.Now;
 
             Ray ray = new Ray(data.PlayerEyePosition, data.PlayerAimDirection);
-            //ServerManager.SendParticleTrail(data.PlayerEyePosition + data.PlayerAimDirection * 3, data.PlayerEyePosition - data.PlayerAimDirection * 3, 5);
+#if DEBUG
+            ServerManager.SendParticleTrail(data.PlayerEyePosition + data.PlayerAimDirection * 3, data.PlayerEyePosition - data.PlayerAimDirection * 3, 5);
 
+            foreach (Players.Player pl in Players.PlayerDatabase.Values)
+            {
+#else
             for (int i = 0; i < Players.CountConnected; i++)
             {
                 Players.Player pl = Players.GetConnectedByIndex(i);
-
+#endif
                 //A plater cannot hit himself
                 if (pl.Equals(player))
                     continue;
@@ -196,7 +206,9 @@ namespace PvP
 
                 if (playerBounds.IntersectRay(ray))
                 {
-                    //Chatting.Chat.SendToConnected(player.Name + " hits " + pl.Name);
+#if DEBUG
+                    Chatting.Chat.SendToConnected(player.Name + " hits " + pl.Name);
+#endif
                     AttackPlayer(pl, player.ID, AttackDamage[(int)Weapon.Punch]);
                     break;
                 }
@@ -237,14 +249,16 @@ namespace PvP
                 float time = projectile.shootTimeMS.TimeSinceThis / 1000f;
 
                 Vector3 nextPosition = projectile.startPostion + projectile.velocity * time + 0.5f * Vector3.down * 9.81f * time * time;
-
-                //ServerManager.SendParticleTrail(projectile.lastPosition, nextPosition,  5);
-
+#if DEBUG
+                ServerManager.SendParticleTrail(projectile.lastPosition, nextPosition,  5);
+#endif
                 //Check if HITS a type (block)
                 //Zun recommends: if (!VoxelPhysics.CanSee(position, nextPosition)) { ... hit something ... }
                 if (!VoxelPhysics.CanSee(projectile.lastPosition, nextPosition))
                 {
-                    //Chatting.Chat.SendToConnected("Hits SOMETHING");
+#if DEBUG
+                    Chatting.Chat.SendToConnected("Hits Block");
+#endif
                     projectiles.RemoveAt(i);
                     continue;
                 }
@@ -270,7 +284,9 @@ namespace PvP
 
                     if (monsterBounds.IntersectRay(ray))
                     {
-                        //Chatting.Chat.SendToConnected("Hits Zombie: " + monster.Position);
+#if DEBUG
+                        Chatting.Chat.SendToConnected("Hits Zombie: " + monster.Position);
+#endif
                         projectiles.RemoveAt(i);
                         continue;
                     }
@@ -283,17 +299,24 @@ namespace PvP
 
                     if (npcBounds.IntersectRay(ray))
                     {
-                        //Chatting.Chat.SendToConnected("Hits NPC: " + npc.Position);
+#if DEBUG
+                            Chatting.Chat.SendToConnected("Hits NPC: " + npc.Position);
+#endif
+                        
                         projectiles.RemoveAt(i);
                         continue;
                     }
                 }
-
                 //Check if HITS a player
-                for (int j = 0; j < Players.CountConnected; j++)
+                bool hitPlayer = false;
+#if DEBUG
+                foreach (Players.Player pl in Players.PlayerDatabase.Values)
                 {
-                    Players.Player pl = Players.GetConnectedByIndex(j);
-
+#else
+                    for (int j = 0; j < Players.CountConnected; j++)
+                {
+                        Players.Player pl = Players.GetConnectedByIndex(j);
+#endif
                     //A player cannot shoot himself
                     if (pl.ID.Equals(projectile.shooter))
                         continue;
@@ -305,8 +328,9 @@ namespace PvP
 
                     if (playerBounds.IntersectRay(ray))
                     {
-                        //Chatting.Chat.SendToConnected(Players.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
-
+#if DEBUG
+                        Chatting.Chat.SendToConnected(Players.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
+#endif
                         switch (projectile.projectileType)
                         {
                             case ProjectileType.Sling: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Sling]); break;
@@ -314,12 +338,21 @@ namespace PvP
                             case ProjectileType.Crossbow: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Crossbow]); break;
                             case ProjectileType.Matchlock: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Matchlockgun]); break;
                         }
+
+                        hitPlayer = true;
                         break;
                     }
                 }
 
-                projectile.lastPosition = nextPosition;
-                projectiles[i] = projectile;
+                if (hitPlayer)
+                {
+                    projectiles.RemoveAt(i);
+                }
+                else
+                {
+                    projectile.lastPosition = nextPosition;
+                    projectiles[i] = projectile;
+                }
             }
         }
 
@@ -346,10 +379,13 @@ namespace PvP
                 }
             }
 
-           if(Players.TryGetPlayer(attacker, out Players.Player pl))
-                Players.TakeHit(attacked, damage * damageModifier, pl, ModLoader.OnHitData.EHitSourceType.PlayerClick);
-           else
-                Players.TakeHit(attacked, damage * damageModifier, null, ModLoader.OnHitData.EHitSourceType.PlayerClick);
+            Players.TryGetPlayer(attacker, out Players.Player attackerPl);
+            Players.TakeHit(attacked, damage * damageModifier, attackerPl, ModLoader.OnHitData.EHitSourceType.PlayerClick);
+
+            if(attacked.Health <=0 && attackerPl!=null)
+            {
+                Chatting.Chat.SendToConnected(attackerPl.Name + " has killed " + attacked.Name);
+            }
         }
 
         /*
