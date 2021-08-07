@@ -28,6 +28,7 @@ namespace PvP
 
             nextUpdate = ServerTimeStamp.Now;
 
+            //FKplayer.Health = FKplayer.HealthMax;
             using (ByteBuilder b = ByteBuilder.Get())
             {
                 b.Write(ClientMessageType.PlayerUpdate);
@@ -41,11 +42,13 @@ namespace PvP
 
                 //NO GliDER
                 b.Write(false);
-                //NO COLOR
-                b.Write(false);
+                //NO COLOR = b.Write(false); & NOT MORE BYTES
+                b.Write(true);
+                b.Write(255);
+                b.Write(0);
+                b.Write(0);
 
-                for (int i = 0; i < 4; i++)
-                    Players.SendToNearby(new Vector3Int(FKplayer.Position), b, 150);
+                Players.SendToNearby(new Vector3Int(FKplayer.Position), b, 150);
             }
         }
 
