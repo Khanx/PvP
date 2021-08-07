@@ -28,6 +28,7 @@ namespace PvP
 
             nextUpdate = ServerTimeStamp.Now;
 
+            FKplayer.Health = FKplayer.HealthMax;
             using (ByteBuilder b = ByteBuilder.Get())
             {
                 b.Write(ClientMessageType.PlayerUpdate);
@@ -44,8 +45,7 @@ namespace PvP
                 //NO COLOR
                 b.Write(false);
 
-                for (int i = 0; i < 4; i++)
-                    Players.SendToNearby(new Vector3Int(FKplayer.Position), b, 150);
+                Players.SendToNearby(new Vector3Int(FKplayer.Position), b, 150);
             }
         }
 

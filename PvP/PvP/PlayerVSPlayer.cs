@@ -209,7 +209,7 @@ namespace PvP
 #if DEBUG
                     Chatting.Chat.SendToConnected(player.Name + " hits " + pl.Name);
 #endif
-                    AttackPlayer(pl, player.ID, AttackDamage[(int)Weapon.Punch]);
+                    AttackPlayer(pl, player.ID, AttackDamage[(int)weapon]);
                     break;
                 }
             }
@@ -384,7 +384,7 @@ namespace PvP
 
 #if DEBUG
             if (attackerPl != null)
-                Chatting.Chat.SendToConnected(attackerPl.Name + "  deals " + damage * damageModifier + " damage to " + attacked.Name);
+                Chatting.Chat.SendToConnected(attackerPl.Name + " deals " + damage * damageModifier + " damage to " + attacked.Name);
             else
                 Chatting.Chat.SendToConnected(attacked.Name + " receives " + damage * damageModifier + " damage");
 #endif
