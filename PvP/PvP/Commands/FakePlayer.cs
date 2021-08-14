@@ -57,7 +57,7 @@ namespace PvP.Commands
             if (!chat.Trim().ToLower().Equals("/spawnfp"))
                 return false;
 
-            if(FKplayer == null)
+            if (FKplayer == null)
                 FKplayer = Players.GetPlayer(new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)));
 
             FKplayer.Name = "Fake Player";

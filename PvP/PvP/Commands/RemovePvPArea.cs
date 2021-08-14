@@ -17,9 +17,9 @@ namespace PvP.Commands
 
             Vector3Int playerPosition = new Vector3Int(player.Position);
 
-            foreach(var area in AreaManager.areas)
+            foreach (var area in AreaManager.areas)
             {
-                if(area.Contains(playerPosition))
+                if (area.Contains(playerPosition))
                 {
                     Chat.Send(player, "<color=green>Area removed.</color>");
                     AreaManager.areas.Remove(area);

@@ -49,10 +49,10 @@ namespace PvP
         public void OnPlayerMoved(Players.Player player, UnityEngine.Vector3 newLocation)
         {
             Vector3Int playerPosition = new Vector3Int(player.Position);
-            
-            foreach(var area in areas)
+
+            foreach (var area in areas)
             {
-                if(area.Contains(playerPosition))
+                if (area.Contains(playerPosition))
                 {
                     if (!playersWithinAnArea.ContainsKey(player.ID) || playersWithinAnArea[player.ID] != area.areaType)
                         Chatting.Chat.Send(player, (area.areaType == AreaType.PvP) ? "You have entered a <color=red>PvP</color> area." : "You have entered a <color=red>Non PvP</color> area.");

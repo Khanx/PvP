@@ -8,7 +8,7 @@ namespace PvP
 {
     public class PvPManagement
     {
-        public static long timeBeforeDisablingPvP =  2L * 60L * 1000L; // 2 min -> It should be configurable
+        public static long timeBeforeDisablingPvP = 2L * 60L * 1000L; // 2 min -> It should be configurable
         public static Dictionary<NetworkID, ServerTimeStamp> pvpPlayers = new Dictionary<NetworkID, ServerTimeStamp>();
 
         public static bool HasPvPEnabled(NetworkID networkID)
@@ -25,7 +25,7 @@ namespace PvP
 
         public static bool CanDisablePvP(NetworkID networkID)
         {
-            if(pvpPlayers.TryGetValue(networkID, out ServerTimeStamp time))
+            if (pvpPlayers.TryGetValue(networkID, out ServerTimeStamp time))
             {
                 return time.TimeSinceThis < timeBeforeDisablingPvP;
             }

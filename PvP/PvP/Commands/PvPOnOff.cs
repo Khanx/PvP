@@ -11,7 +11,7 @@ namespace PvP.Commands
             if (splits.Count == 0 || !splits[0].ToLower().Equals("/pvp"))
                 return false;
 
-            if(splits.Count < 2)
+            if (splits.Count < 2)
             {
                 Chat.Send(player, "<color=red>Syntax error, use /pvp on/off </color>");
                 return true;
@@ -31,7 +31,7 @@ namespace PvP.Commands
 
                 Chat.Send(player, "PvP disabled.");
             }
-            
+
             return true;
         }
     }

@@ -31,7 +31,7 @@ namespace PvP
             if (data.ClickType != PlayerClickedData.EClickType.Left)
                 return;
 
-            if(!PvPManagement.HasPvPEnabled(player.ID))
+            if (!PvPManagement.HasPvPEnabled(player.ID))
             {
 #if DEBUG
                 Chatting.Chat.SendToConnected(player.Name + " don't have PvP enabled.");
@@ -46,7 +46,7 @@ namespace PvP
         }
 
         //READ: https://discord.com/channels/345192439323033601/345214873082527756/835464495744417812
-        
+
         public static readonly long[] TimeBetweenAttacks = new long[(int)Weapon.MAX];
         //Official damange: PUNCH = 35, SLING = 50, BOW = 100, CROSSBOW = 300, MATCHLOCK = 500
         public static readonly float[] AttackDamage = new float[(int)Weapon.MAX];
@@ -251,7 +251,7 @@ namespace PvP
 
                 Vector3 nextPosition = projectile.startPostion + projectile.velocity * time + 0.5f * Vector3.down * 9.81f * time * time;
 #if DEBUG
-                ServerManager.SendParticleTrail(projectile.lastPosition, nextPosition,  5);
+                ServerManager.SendParticleTrail(projectile.lastPosition, nextPosition, 5);
 #endif
                 //Check if HITS a type (block)
                 //Zun recommends: if (!VoxelPhysics.CanSee(position, nextPosition)) { ... hit something ... }
@@ -301,9 +301,9 @@ namespace PvP
                     if (npcBounds.IntersectRay(ray))
                     {
 #if DEBUG
-                            Chatting.Chat.SendToConnected("Hits NPC: " + npc.Position);
+                        Chatting.Chat.SendToConnected("Hits NPC: " + npc.Position);
 #endif
-                        
+
                         projectiles.RemoveAt(i);
                         continue;
                     }
@@ -373,15 +373,16 @@ namespace PvP
             {
                 if (i.Type == armorType[0]) //PvPClothArmor
                 {
-                    if(damageModifier == 1)
+                    if (damageModifier == 1)
                         damageModifier = 0.25f;
 
-                } else if (i.Type == armorType[1])  //PvPChainArmor
+                }
+                else if (i.Type == armorType[1])  //PvPChainArmor
                 {
                     if (damageModifier == 1f || damageModifier < 0.5f)
                         damageModifier = 0.5f;
                 }
-                else if(i.Type == armorType[2]) //PvPPlateArmor
+                else if (i.Type == armorType[2]) //PvPPlateArmor
                 {
                     if (damageModifier == 1f || damageModifier < 0.75f)
                         damageModifier = 0.57f;
@@ -398,7 +399,7 @@ namespace PvP
                 Chatting.Chat.SendToConnected(attacked.Name + " receives " + damage * damageModifier + " damage");
 #endif
 
-            if (attacked.Health <=0 && attackerPl!=null)
+            if (attacked.Health <= 0 && attackerPl != null)
             {
                 Chatting.Chat.SendToConnected(attackerPl.Name + " has killed " + attacked.Name);
             }

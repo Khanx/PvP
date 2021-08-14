@@ -15,7 +15,7 @@ namespace PvP.Commands
             if (!PermissionsManager.CheckAndWarnPermission(player, "khanx.pvp"))
                 return true;
 
-            if(!PvPToolType.playerArea.TryGetValue(player.ID, out Area area))
+            if (!PvPToolType.playerArea.TryGetValue(player.ID, out Area area))
             {
                 Chat.Send(player, "<color=red>You have not created any area, you must use the PvP Tool to create the area.</color>");
 
@@ -29,14 +29,14 @@ namespace PvP.Commands
             area.max = Vector3Int.Max(corner1, corner2);
             area.areaType = AreaType.PvP;
 
-            if(!area.Contains(new Vector3Int(player.Position)))
+            if (!area.Contains(new Vector3Int(player.Position)))
             {
                 Chat.Send(player, "<color=red>You must be inside the area to be able to create it.</ color>");
 
                 return true;
             }
 
-            foreach(var area2 in AreaManager.areas)
+            foreach (var area2 in AreaManager.areas)
             {
                 if (Area.Intersects(area, area2))
                 {
