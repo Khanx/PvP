@@ -31,6 +31,14 @@ namespace PvP
             if (data.ClickType != PlayerClickedData.EClickType.Left)
                 return;
 
+            if(!PvPManagement.HasPvPEnabled(player.ID))
+            {
+#if DEBUG
+                Chatting.Chat.SendToConnected(player.Name + " don't have PvP enabled.");
+#endif
+                return;
+            }
+
             if (data.IsConsumed && data.ConsumedType == PlayerClickedData.EConsumedType.UsedAsTool)
                 TryShoot(player, data);
             else
@@ -351,6 +359,14 @@ namespace PvP
 
         public static void AttackPlayer(Players.Player attacked, NetworkID attacker, float damage)
         {
+            if (!PvPManagement.HasPvPEnabled(attacked.ID))
+            {
+#if DEBUG
+                Chatting.Chat.SendToConnected(attacked.Name + " don't have PvP enabled.");
+#endif
+                return;
+            }
+
             float damageModifier = 1;
 
             foreach (var i in attacked.Inventory.Items)

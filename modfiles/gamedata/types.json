@@ -1,8 +1,19 @@
 {
+	"Khanx.PvPTool" : {
+    "categories" : [
+	  "khanx",
+	  "pvp",
+	  "tool"
+    ],
+    "isPlaceable" : false,
+    "icon" : "./icons/pvptool.png"
+  },
   "Khanx.PvPBronzeSword" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/bronzesword.png"
@@ -10,7 +21,9 @@
   "Khanx.PvPIronSword" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/ironsword.png"
@@ -18,7 +31,9 @@
   "Khanx.PvPSteelSword" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/steelsword.png"
@@ -26,7 +41,9 @@
   "Khanx.PvPBronzeSpear" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/bronzespear.png"
@@ -34,7 +51,9 @@
   "Khanx.PvPIronSpear" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/ironspear.png"
@@ -42,7 +61,9 @@
   "Khanx.PvPSteelSpear" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/steelspear.png"
@@ -50,7 +71,9 @@
   "Khanx.PvPBronzeMace" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/compass.png"
@@ -58,7 +81,9 @@
   "Khanx.PvPIronMace" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/compass.png"
@@ -66,7 +91,9 @@
   "Khanx.PvPSteelMace" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "weapon",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/compass.png"
@@ -74,7 +101,9 @@
   "Khanx.PvPClothArmor" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "armor",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/compass.png"
@@ -82,7 +111,9 @@
   "Khanx.PvPChainArmor" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "armor",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/compass.png"
@@ -90,7 +121,9 @@
   "Khanx.PvPPlateArmor" : {
     "categories" : [
 	  "khanx",
-	  "pvp"
+	  "pvp",
+	  "armor",
+	  "combat"
     ],
     "isPlaceable" : false,
     "icon" : "./icons/compass.png"

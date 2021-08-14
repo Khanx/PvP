@@ -6,7 +6,7 @@ using ModLoaderInterfaces;
 
 //This method must be only be available for testing
 #if DEBUG
-namespace PvP
+namespace PvP.Commands
 {
     [ChatCommandAutoLoader]
     public class FakePlayer : IChatCommand, IOnUpdate
@@ -86,6 +86,32 @@ namespace PvP
             }
 
             Chat.Send(player, "Fake player Spawned");
+
+            {   //Simulating player movement for the AreaManagement
+                Vector3Int playerPosition = new Vector3Int(FKplayer.Position);
+
+                bool fkplayerInArea = false;
+
+                foreach (var area in AreaManager.areas)
+                {
+                    if (area.Contains(playerPosition))
+                    {
+                        fkplayerInArea = true;
+
+                        Chatting.Chat.SendToConnected((area.areaType == AreaType.PvP) ? FKplayer.Name + " have entered a <color=red>PvP</color> area." : FKplayer.Name + " have entered a <color=red>Non PvP</color> area.");
+
+                        AreaManager.playersWithinAnArea[FKplayer.ID] = area.areaType;
+                        break;
+                    }
+                }
+
+                if (AreaManager.playersWithinAnArea.ContainsKey(FKplayer.ID) && !fkplayerInArea)
+                {
+                    Chatting.Chat.SendToConnected((AreaManager.playersWithinAnArea[FKplayer.ID] == AreaType.PvP) ? FKplayer.Name + " have left the <color=red>PvP</color> area." : FKplayer.Name + " have left the <color=red>Non PvP</color> area.");
+                    AreaManager.playersWithinAnArea.Remove(FKplayer.ID);
+                }
+            }
+
             return true;
         }
     }
