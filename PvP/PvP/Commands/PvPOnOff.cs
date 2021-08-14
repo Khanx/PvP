@@ -1,4 +1,5 @@
 ﻿using Chatting;
+using System;
 using System.Collections.Generic;
 
 namespace PvP.Commands
@@ -27,9 +28,23 @@ namespace PvP.Commands
             else if (splits[1].ToLower().Equals("off"))
             {
                 if (PvPManagement.CanDisablePvP(player.ID))
+                {
                     PvPManagement.pvpPlayers.Remove(player.ID);
 
-                Chat.Send(player, "PvP disabled.");
+                    Chat.Send(player, "PvP disabled.");
+                }
+                else
+                {
+
+                    TimeSpan t = TimeSpan.FromMilliseconds((double) (PvPManagement.timeBeforeDisablingPvP - PvPManagement.pvpPlayers[player.ID].TimeSinceThis));
+                    string time;
+                    if(t.Minutes != 0)
+                        time = string.Format("{0}m and {1}s", t.Minutes, t.Seconds);
+                    else
+                        time = string.Format("{0:D2}s", t.Seconds);
+
+                    Chat.Send(player, string.Format("You must wait {0} before disabling PvP.", time));
+                }
             }
 
             return true;

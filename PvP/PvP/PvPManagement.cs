@@ -27,7 +27,7 @@ namespace PvP
         {
             if (pvpPlayers.TryGetValue(networkID, out ServerTimeStamp time))
             {
-                return time.TimeSinceThis < timeBeforeDisablingPvP;
+                return time.TimeSinceThis > timeBeforeDisablingPvP;
             }
 
             return true;
