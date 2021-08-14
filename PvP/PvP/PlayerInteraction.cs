@@ -42,7 +42,7 @@ namespace PvP
             if (data.IsConsumed && data.ConsumedType == PlayerClickedData.EConsumedType.UsedAsTool)
                 TryShoot(player, data);
             else
-                TryMele(player, data);
+                TryMelee(player, data);
         }
 
         //READ: https://discord.com/channels/345192439323033601/345214873082527756/835464495744417812
@@ -169,7 +169,7 @@ namespace PvP
             }
         }
 
-        public static void TryMele(Players.Player player, PlayerClickedData data)
+        public static void TryMelee(Players.Player player, PlayerClickedData data)
         {
             if (!type2Weapon.TryGetValue(data.TypeSelected, out Weapon weapon))
                 weapon = Weapon.Punch;
