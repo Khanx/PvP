@@ -76,7 +76,7 @@
 	  "combat"
     ],
     "isPlaceable" : false,
-    "icon" : "./icons/compass.png"
+    "icon" : "./icons/bronzemace.png"
   },
   "Khanx.PvPIronMace" : {
     "categories" : [
@@ -86,7 +86,7 @@
 	  "combat"
     ],
     "isPlaceable" : false,
-    "icon" : "./icons/compass.png"
+    "icon" : "./icons/ironmace.png"
   },
   "Khanx.PvPSteelMace" : {
     "categories" : [
@@ -96,7 +96,7 @@
 	  "combat"
     ],
     "isPlaceable" : false,
-    "icon" : "./icons/compass.png"
+    "icon" : "./icons/steelmace.png"
   },
   "Khanx.PvPClothArmor" : {
     "categories" : [
@@ -106,7 +106,7 @@
 	  "combat"
     ],
     "isPlaceable" : false,
-    "icon" : "./icons/compass.png"
+    "icon" : "./icons/clotharmor.png"
   },
   "Khanx.PvPChainArmor" : {
     "categories" : [
@@ -116,7 +116,7 @@
 	  "combat"
     ],
     "isPlaceable" : false,
-    "icon" : "./icons/compass.png"
+    "icon" : "./icons/chainarmor.png"
   },
   "Khanx.PvPPlateArmor" : {
     "categories" : [
@@ -126,6 +126,6 @@
 	  "combat"
     ],
     "isPlaceable" : false,
-    "icon" : "./icons/compass.png"
+    "icon" : "./icons/platearmor.png"
   }
 }

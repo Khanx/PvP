@@ -2,12 +2,139 @@
 	{
 		"defaultLimit" : 5,
 		"defaultPriority" : -100,
-		"name" : "Khanx.player.PvPIronSword",
+		"name" : "Khanx.player.PvPBronzeSword",
 		"requires" : [
-			{"amount":4,"type":"ironingot"},
+			{"amount":4,"type":"bronzeplate"},
 		],
 		"results" : [
 			{"type":"Khanx.PvPBronzeSword"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPIronSword",
+		"requires" : [
+			{"amount":8,"type":"ironwrought"},
+		],
+		"results" : [
+			{"type":"Khanx.PvPIronSword"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPSteelSword",
+		"requires" : [
+			{"amount":16,"type":"steelparts"},
+		],
+		"results" : [
+			{"type":"Khanx.PvPSteelSword"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPBronzeSpear",
+		"requires" : [
+			{"amount":2,"type":"bronzeplate"},
+			{"amount":2,"type":"planks"}
+		],
+		"results" : [
+			{"type":"Khanx.PvPBronzeSpear"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPIronSpear",
+		"requires" : [
+			{"amount":6,"type":"ironwrought"},
+			{"amount":2,"type":"planks"}
+		],
+		"results" : [
+			{"type":"Khanx.PvPIronSpear"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPSteelSpear",
+		"requires" : [
+			{"amount":14,"type":"steelparts"},
+			{"amount":2,"type":"planks"}
+		],
+		"results" : [
+			{"type":"Khanx.PvPSteelSpear"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPBronzeMace",
+		"requires" : [
+			{"amount":3,"type":"bronzeplate"},
+			{"amount":1,"type":"planks"}
+		],
+		"results" : [
+			{"type":"Khanx.PvPBronzeMace"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPIronMace",
+		"requires" : [
+			{"amount":7,"type":"ironwrought"},
+			{"amount":1,"type":"planks"}
+		],
+		"results" : [
+			{"type":"Khanx.PvPIronMace"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPSteelMace",
+		"requires" : [
+			{"amount":15,"type":"steelparts"},
+			{"amount":1,"type":"planks"}
+		],
+		"results" : [
+			{"type":"Khanx.PvPSteelMace"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPClothArmor",
+		"requires" : [
+			{"amount":8,"type":"undershirt"},
+		],
+		"results" : [
+			{"type":"Khanx.PvPClothArmor"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPChainArmor",
+		"requires" : [
+			{"amount":16,"type":"ironwrought"},
+		],
+		"results" : [
+			{"type":"Khanx.PvPChainArmor"}
+		]
+	},
+	{
+		"defaultLimit" : 5,
+		"defaultPriority" : -100,
+		"name" : "Khanx.player.PvPPlateArmor",
+		"requires" : [
+			{"amount":32,"type":"steelparts"},
+		],
+		"results" : [
+			{"type":"Khanx.PvPPlateArmor"}
 		]
 	}
 ]
