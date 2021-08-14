@@ -374,18 +374,17 @@ namespace PvP
                 if (i.Type == armorType[0]) //PvPClothArmor
                 {
                     if (damageModifier == 1)
-                        damageModifier = 0.25f;
-
+                        damageModifier = 0.75f;
                 }
                 else if (i.Type == armorType[1])  //PvPChainArmor
                 {
-                    if (damageModifier == 1f || damageModifier < 0.5f)
+                    if (damageModifier == 1f || damageModifier > 0.5f)
                         damageModifier = 0.5f;
                 }
                 else if (i.Type == armorType[2]) //PvPPlateArmor
                 {
-                    if (damageModifier == 1f || damageModifier < 0.75f)
-                        damageModifier = 0.57f;
+                    if (damageModifier == 1f || damageModifier > 0.25f)
+                        damageModifier = 0.25f;
                 }
             }
 

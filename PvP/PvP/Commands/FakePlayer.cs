@@ -54,7 +54,7 @@ namespace PvP.Commands
 
         public bool TryDoCommand(Players.Player player, string chat, List<string> splits)
         {
-            if (!chat.Trim().ToLower().Equals("/spawnfp"))
+            if (!chat.Trim().ToLower().StartsWith("/spawnfp"))
                 return false;
 
             if (FKplayer == null)
@@ -86,6 +86,30 @@ namespace PvP.Commands
             }
 
             Chat.Send(player, "Fake player Spawned");
+
+            //clear Inventory
+            FKplayer.Inventory.Clear();
+
+            if(splits.Count > 1)
+            {
+                switch(splits[1])
+                {
+                    case "cloth":
+                        FKplayer.Inventory.TryAdd(PlayerInteraction.armorType[0]);
+                        Chat.Send(player, "Fake player equiped with Cloth Armor");
+                        break;
+                    case "chain":
+                        FKplayer.Inventory.TryAdd(PlayerInteraction.armorType[1]);
+                        Chat.Send(player, "Fake player equiped with Chain Armor");
+                        break;
+                    case "plate":
+                        FKplayer.Inventory.TryAdd(PlayerInteraction.armorType[2]);
+                        Chat.Send(player, "Fake player equiped with Plate Armor");
+                        break;
+                }
+            }
+
+            
 
             {   //Simulating player movement for the AreaManagement
                 Vector3Int playerPosition = new Vector3Int(FKplayer.Position);
