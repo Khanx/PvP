@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using colonyserver.Assets.UIGeneration;
+using ModLoaderInterfaces;
+using Pipliz;
 
 namespace PvP
 {
-    public class PvPManagement
+    public class PvPManagement : IOnPlayerConnectedLate
     {
         public static long timeBeforeDisablingPvP = 2L * 60L * 1000L; // 2 min -> It should be configurable
         public static Dictionary<NetworkID, ServerTimeStamp> pvpPlayers = new Dictionary<NetworkID, ServerTimeStamp>();
@@ -31,6 +34,14 @@ namespace PvP
             }
 
             return true;
+        }
+
+        public void OnPlayerConnectedLate(Players.Player player)
+        {
+            if (pvpPlayers.ContainsKey(player.ID))
+                UIManager.AddorUpdateUILabel("PvP_On", colonyshared.NetworkUI.UIGeneration.UIElementDisplayType.Global, "PvP ON",
+                        new Vector3Int(100, -100, 100), colonyshared.NetworkUI.AnchorPresets.TopLeft,
+                        100, player, color: "#ff0000");
         }
     }
 }

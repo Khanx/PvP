@@ -1,4 +1,6 @@
 ﻿using Chatting;
+using colonyserver.Assets.UIGeneration;
+using Pipliz;
 using System;
 using System.Collections.Generic;
 
@@ -23,6 +25,10 @@ namespace PvP.Commands
                 if (!PvPManagement.pvpPlayers.ContainsKey(player.ID))
                     PvPManagement.pvpPlayers[player.ID] = ServerTimeStamp.Now;
 
+                UIManager.AddorUpdateUILabel("PvP_On", colonyshared.NetworkUI.UIGeneration.UIElementDisplayType.Global, "PvP ON",
+                    new Vector3Int(100, -100, 100), colonyshared.NetworkUI.AnchorPresets.TopLeft,
+                    100, player, color: "#ff0000");
+
                 Chat.Send(player, "PvP enabled.");
             }
             else if (splits[1].ToLower().Equals("off"))
@@ -30,6 +36,7 @@ namespace PvP.Commands
                 if (PvPManagement.CanDisablePvP(player.ID))
                 {
                     PvPManagement.pvpPlayers.Remove(player.ID);
+                    UIManager.RemoveUILabel("PvP_On", player);
 
                     Chat.Send(player, "PvP disabled.");
                 }
