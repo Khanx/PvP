@@ -34,7 +34,7 @@ namespace PvP.Commands
                 b.Write(ClientMessageType.PlayerUpdate);
                 new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
 
-                b.Write(NPC.NPCType.GetByKeyNameOrDefault("pipliz.networkplayer").Type);
+                b.Write(NPC.NPCType.GetByKeyNameOrDefault("pipliz.merchant").Type);
                 b.Write(FKplayer.Position);
                 b.WriteVariable((uint)FKplayer.Rotation.eulerAngles.x);
                 b.WriteVariable((uint)FKplayer.Rotation.eulerAngles.y);
@@ -70,7 +70,7 @@ namespace PvP.Commands
                 b.Write(ClientMessageType.PlayerUpdate);
                 new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
 
-                b.Write(NPC.NPCType.GetByKeyNameOrDefault("pipliz.networkplayer").Type);
+                b.Write(NPC.NPCType.GetByKeyNameOrDefault("pipliz.merchant").Type);
                 b.Write(player.Position);
                 b.WriteVariable((uint)player.Rotation.eulerAngles.x);
                 b.WriteVariable((uint)player.Rotation.eulerAngles.y);
