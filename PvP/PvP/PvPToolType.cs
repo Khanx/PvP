@@ -25,7 +25,7 @@ namespace PvP
             if (playerClickedData.HitType != EHitType.Block || playerClickedData.GetVoxelHit().TypeHit == BlockTypes.BuiltinBlocks.Indices.air)
                 return;
 
-            if (!PermissionsManager.CheckAndWarnPermission(player, "khanx.pvp"))
+            if (!PermissionsManager.CheckAndWarnPermission(player, "khanx.pvp.area"))
                 return;
 
             if (playerClickedData.ClickType == EClickType.Left)
@@ -48,7 +48,7 @@ namespace PvP
 
         public void OnSendAreaHighlights(Players.Player player, List<AreaJobTracker.AreaHighlight> list, List<ushort> showWhileHoldingTypes)
         {
-            if (null == player || !PermissionsManager.HasPermission(player, "khanx.pvp"))
+            if (null == player || !PermissionsManager.HasPermission(player, "khanx.pvp.area"))
                 return;
 
             showWhileHoldingTypes.Add(pvpTool);

@@ -12,7 +12,7 @@ namespace PvP.Commands
             if (!chat.Trim().ToLower().Equals("/createnonpvparea"))
                 return false;
 
-            if (!PermissionsManager.CheckAndWarnPermission(player, "khanx.pvp"))
+            if (!PermissionsManager.CheckAndWarnPermission(player, "khanx.pvp.area"))
                 return true;
 
             if (!PvPToolType.playerArea.TryGetValue(player.ID, out Area area))
