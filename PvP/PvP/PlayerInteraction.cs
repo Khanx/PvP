@@ -402,6 +402,15 @@ namespace PvP
             {
                 Chatting.Chat.SendToConnected(attackerPl.Name + " has killed " + attacked.Name);
             }
+
+            //Reset PvP cooldown
+            PvPManagement.pvpPlayers[attacked.ID] = ServerTimeStamp.Now;
+            if(attackerPl != null)
+                PvPManagement.pvpPlayers[attackerPl.ID] = ServerTimeStamp.Now;
+
+#if DEBUG
+                Chatting.Chat.SendToConnected("Reser PvP cooldown.");
+#endif
         }
 
         /*
