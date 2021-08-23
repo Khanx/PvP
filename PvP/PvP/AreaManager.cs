@@ -39,12 +39,10 @@ namespace PvP
         }
     }
 
-    public class AreaManager : IAfterWorldLoad, IOnAutoSaveWorld, IOnQuit, IOnPlayerMoved
+    public class AreaManager : IOnPlayerMoved
     {
         public static List<Area> areas = new List<Area>();
         public static Dictionary<NetworkID, AreaType> playersWithinAnArea = new Dictionary<NetworkID, AreaType>();
-
-        private static string pvpAreaFile;
 
         public void OnPlayerMoved(Players.Player player, UnityEngine.Vector3 newLocation)
         {
@@ -68,34 +66,6 @@ namespace PvP
                 Chatting.Chat.Send(player, (playersWithinAnArea[player.ID] == AreaType.PvP) ? "You have left the <color=red>PvP</color> area." : "You have left the <color=red>Non PvP</color> area.");
                 playersWithinAnArea.Remove(player.ID);
             }
-        }
-
-        public void AfterWorldLoad()
-        {
-            pvpAreaFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvparea.json";
-
-            if (!File.Exists(pvpAreaFile))
-                return;
-
-            areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
-        }
-
-
-        public static void SaveArea()
-        {
-            string json = JsonConvert.SerializeObject(areas);
-
-            File.WriteAllText(pvpAreaFile, json);
-        }
-
-        public void OnAutoSaveWorld()
-        {
-            SaveArea();
-        }
-
-        public void OnQuit()
-        {
-            SaveArea();
         }
     }
 }

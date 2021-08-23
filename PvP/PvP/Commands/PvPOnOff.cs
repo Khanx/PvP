@@ -20,6 +20,13 @@ namespace PvP.Commands
                 return true;
             }
 
+            if(PvPManagement.bannedPlayers.Contains(player.ID))
+            {
+                Chat.Send(player, "You are banned from PvP.");
+
+                return true;
+            }
+
             if (splits[1].ToLower().Equals("on"))
             {
                 if (!PvPManagement.pvpPlayers.ContainsKey(player.ID))
