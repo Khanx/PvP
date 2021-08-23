@@ -56,12 +56,17 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\Archivos de programa\Steam\steamapps\common\Colony Survival\colonyserver_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Archivos de programa\Steam\steamapps\common\Colony Survival\colonyserver_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AreaManager.cs" />
     <Compile Include="Commands\CreateNonPvPArea.cs" />
     <Compile Include="Commands\CreatePvPArea.cs" />
     <Compile Include="Commands\FakePlayer.cs" />
+    <Compile Include="Commands\PvPManage.cs" />
     <Compile Include="Commands\PvPOnOff.cs" />
     <Compile Include="Commands\RemovePvPArea.cs" />
     <Compile Include="PlayerHelper.cs" />

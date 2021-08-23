@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using colonyserver.Assets.UIGeneration;
 using ModLoaderInterfaces;
 using Pipliz;
@@ -16,7 +12,9 @@ namespace PvP
 
         public static bool HasPvPEnabled(NetworkID networkID)
         {
-            //ADD STAFF HERE
+            //Staff members only have PvP enable IF they enable it
+            if (PermissionsManager.HasPermission(Players.GetPlayer(networkID), "khanx.pvp") && !pvpPlayers.ContainsKey(networkID))
+                return false;
 
             if (AreaManager.playersWithinAnArea.TryGetValue(networkID, out AreaType area))
             {
@@ -28,6 +26,9 @@ namespace PvP
 
         public static bool CanDisablePvP(NetworkID networkID)
         {
+            if (PermissionsManager.HasPermission(Players.GetPlayer(networkID), "khanx.pvp"))
+                return true;
+
             if (pvpPlayers.TryGetValue(networkID, out ServerTimeStamp time))
             {
                 return time.TimeSinceThis > timeBeforeDisablingPvP;
