@@ -16,33 +16,33 @@ namespace PvP
             if (!Directory.Exists("./gamedata/savegames/" + ServerManager.WorldName + "/pvp"))
                 Directory.CreateDirectory("./gamedata/savegames/" + ServerManager.WorldName + "/pvp");
 
+            pvpSettingsFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvpsettings.json";
             pvpBannedFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvpbanned.json";
-            pvpSettingsFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvpbanned.json";
             pvpAreaFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvparea.json";
 
-            if (!File.Exists(pvpAreaFile))
-                AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
+            if (File.Exists(pvpSettingsFile))
+                PvPManagement.settings = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(pvpBannedFile));
 
             if (File.Exists(pvpBannedFile))
                 PvPManagement.bannedPlayers = JsonConvert.DeserializeObject<List<NetworkID>>(File.ReadAllText(pvpBannedFile));
 
-            if (File.Exists(pvpSettingsFile))
-                PvPManagement.settings = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(pvpBannedFile));
+            if (!File.Exists(pvpAreaFile))
+                AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
         }
 
         private static void saveData()
         {
-            string areaJson = JsonConvert.SerializeObject(AreaManager.areas);
+            string settingsJson = JsonConvert.SerializeObject(PvPManagement.settings);
 
-            File.WriteAllText(pvpAreaFile, areaJson);
+            File.WriteAllText(pvpSettingsFile, settingsJson);
 
             string bannedJson = JsonConvert.SerializeObject(PvPManagement.bannedPlayers);
 
             File.WriteAllText(pvpBannedFile, bannedJson);
 
-            string settingsJson = JsonConvert.SerializeObject(PvPManagement.settings);
+            string areaJson = JsonConvert.SerializeObject(AreaManager.areas);
 
-            File.WriteAllText(pvpSettingsFile, settingsJson);
+            File.WriteAllText(pvpAreaFile, areaJson);
         }
 
         public void OnAutoSaveWorld()
