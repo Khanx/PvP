@@ -21,7 +21,7 @@ namespace PvP
             pvpAreaFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvparea.json";
 
             if (File.Exists(pvpSettingsFile))
-                PvPManagement.settings = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(pvpBannedFile));
+                PvPManagement.settings = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(pvpSettingsFile));
 
             if (File.Exists(pvpBannedFile))
                 PvPManagement.bannedPlayers = JsonConvert.DeserializeObject<List<NetworkID>>(File.ReadAllText(pvpBannedFile));
