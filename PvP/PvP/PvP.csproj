@@ -70,7 +70,6 @@
     <Compile Include="Commands\PvPOnOff.cs" />
     <Compile Include="Commands\RemovePvPArea.cs" />
     <Compile Include="FileManager.cs" />
-    <Compile Include="PlayerHelper.cs" />
     <Compile Include="Projectile.cs" />
     <Compile Include="PlayerInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
