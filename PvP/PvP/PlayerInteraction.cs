@@ -409,7 +409,7 @@ namespace PvP
                 PvPManagement.pvpPlayers[attackerPl.ID] = ServerTimeStamp.Now;
 
 #if DEBUG
-                Chatting.Chat.SendToConnected("Reser PvP cooldown.");
+                Chatting.Chat.SendToConnected("Reset PvP cooldown.");
 #endif
         }
 
