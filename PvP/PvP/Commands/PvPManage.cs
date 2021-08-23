@@ -31,7 +31,7 @@ namespace PvP.Commands
 
             menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettings", new LabelData("Global Settings", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: PermissionsManager.HasPermission(player, "khanx.pvp.global")));
             menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_PlayerList", new LabelData("Manage Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_BannedList", new LabelData("Manage Bans", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
+            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_BannedList", new LabelData("Manage Banned Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
             menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_Log", new LabelData("Log", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: false));
 
             NetworkMenuManager.SendServerPopup(player, menu);
@@ -40,14 +40,14 @@ namespace PvP.Commands
         public static void SendManageGlobalSettings(Players.Player player)
         {
             NetworkMenu menu = new NetworkMenu();
-            menu.LocalStorage.SetAs("header", "Manage PvP Players");
+            menu.LocalStorage.SetAs("header", "Manage Global Settings");
             menu.Width = 500;
 
             int status = PvPManagement.settings.GetValueOrDefault("GlobalPvP", 0);
 
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("Normal PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 0 } }, isInteractive: 0 == status));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP On for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 1 } }, isInteractive: 1 == status));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP Off for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 2 } }, isInteractive: 0 == status));
+            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("Normal PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 0 } }, isInteractive: 0 != status));
+            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP On for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 1 } }, isInteractive: 1 != status));
+            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP Off for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 2 } }, isInteractive: 2 != status));
 
             NetworkMenuManager.SendServerPopup(player, menu);
         }
@@ -113,7 +113,7 @@ namespace PvP.Commands
         public static void SendManageBannedList(Players.Player player)
         {
             NetworkMenu menu = new NetworkMenu();
-            menu.LocalStorage.SetAs("header", "Manage PvP Players");
+            menu.LocalStorage.SetAs("header", "Manage Banned Players");
             menu.Width = 500;
             menu.Height = 600;
 
