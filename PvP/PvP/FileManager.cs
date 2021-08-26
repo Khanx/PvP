@@ -30,7 +30,7 @@ namespace PvP
                 AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
         }
 
-        private static void saveData()
+        private static void SaveData()
         {
             string settingsJson = JsonConvert.SerializeObject(PvPManagement.settings);
 
@@ -47,12 +47,12 @@ namespace PvP
 
         public void OnAutoSaveWorld()
         {
-            saveData();
+            SaveData();
         }
 
         public void OnQuit()
         {
-            saveData();
+            SaveData();
         }
     }
 }
