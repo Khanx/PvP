@@ -50,7 +50,7 @@ namespace PvP
 
             string logJson = JsonConvert.SerializeObject(PvPManage.killLog);
 
-            File.WriteAllText(pvpAreaFile, logJson);
+            File.WriteAllText(pvpLogFile, logJson);
         }
 
         public void OnAutoSaveWorld()
