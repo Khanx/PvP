@@ -196,7 +196,7 @@ namespace PvP.Commands
                     NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
 
                     if (PvPManagement.HasPvPEnabled(plrId))
-                        PvPManagement.DisablePvP(plrId);
+                        PvPManagement.DisablePvP(plrId, true);
                     else
                         PvPManagement.EnablePvP(plrId);
 
