@@ -31,7 +31,7 @@ namespace PvP
             if (data.ClickType != PlayerClickedData.EClickType.Left)
                 return;
 
-            if (!PvPManagement.HasPvPEnabled(player.ID))
+            if (!PvPManagement.IsInPvP(player.ID))
             {
 #if DEBUG
                 Chatting.Chat.SendToConnected(player.Name + " don't have PvP enabled.");
@@ -359,7 +359,7 @@ namespace PvP
 
         public static void AttackPlayer(Players.Player attacked, NetworkID attacker, float damage)
         {
-            if (!PvPManagement.HasPvPEnabled(attacked.ID))
+            if (!PvPManagement.IsInPvP(attacked.ID))
             {
 #if DEBUG
                 Chatting.Chat.SendToConnected(attacked.Name + " don't have PvP enabled.");
@@ -404,9 +404,9 @@ namespace PvP
             }
 
             //Reset PvP cooldown
-            PvPManagement.pvpPlayers[attacked.ID] = ServerTimeStamp.Now;
+            PvPManagement.ResetPvPCoolDown(attacked.ID);
             if(attackerPl != null)
-                PvPManagement.pvpPlayers[attackerPl.ID] = ServerTimeStamp.Now;
+                PvPManagement.ResetPvPCoolDown(attackerPl.ID);
 
 #if DEBUG
                 Chatting.Chat.SendToConnected("Reset PvP cooldown.");

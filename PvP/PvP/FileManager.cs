@@ -24,7 +24,7 @@ namespace PvP
                 PvPManagement.settings = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(pvpSettingsFile));
 
             if (File.Exists(pvpBannedFile))
-                PvPManagement.bannedPlayers = JsonConvert.DeserializeObject<List<NetworkID>>(File.ReadAllText(pvpBannedFile));
+                PvPManagement.LoadBannedPlayers(JsonConvert.DeserializeObject<List<NetworkID>>(File.ReadAllText(pvpBannedFile)));
 
             if (!File.Exists(pvpAreaFile))
                 AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
@@ -36,7 +36,7 @@ namespace PvP
 
             File.WriteAllText(pvpSettingsFile, settingsJson);
 
-            string bannedJson = JsonConvert.SerializeObject(PvPManagement.bannedPlayers);
+            string bannedJson = JsonConvert.SerializeObject(PvPManagement.GetBannedList());
 
             File.WriteAllText(pvpBannedFile, bannedJson);
 

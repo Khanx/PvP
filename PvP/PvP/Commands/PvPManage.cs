@@ -90,7 +90,7 @@ namespace PvP.Commands
                 {
                     row.Add((new NetworkUI.Items.Label(new LabelData("Staff", UnityEngine.Color.blue)), 100));
                 }
-                else if (PvPManagement.pvpPlayers.ContainsKey(plr.ID))
+                else if (PvPManagement.HasPvPEnabled(plr.ID))
                 {
                     row.Add((new NetworkUI.Items.Label(new LabelData("PvP On", UnityEngine.Color.red)), 100));
                 }
@@ -99,7 +99,7 @@ namespace PvP.Commands
                     row.Add((new NetworkUI.Items.Label(new LabelData("PvP Off", UnityEngine.Color.green)), 100));
                 }
 
-                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.pvpPlayers.ContainsKey(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: !staffMember), 100));
+                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: !staffMember), 100));
                 row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_BanPlayer", new LabelData("Ban from PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }, isInteractive: !staffMember), 150));
 
                 table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
@@ -134,7 +134,7 @@ namespace PvP.Commands
 
             table.Rows = new List<IItem>();
 
-            foreach(var plrID in PvPManagement.bannedPlayers)
+            foreach(var plrID in PvPManagement.GetBannedList())
             {
                 if(Players.PlayerDatabase.TryGetValue(plrID, out Players.Player plr))
                 {
@@ -195,10 +195,10 @@ namespace PvP.Commands
                 {
                     NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
 
-                    if (!PvPManagement.pvpPlayers.Remove(plrId))
-                    {
-                        PvPManagement.pvpPlayers.Add(plrId, ServerTimeStamp.Now);
-                    }
+                    if (PvPManagement.HasPvPEnabled(plrId))
+                        PvPManagement.DisablePvP(plrId);
+                    else
+                        PvPManagement.EnablePvP(plrId);
 
                     SendManagePlayerList(data.Player);
                 }
@@ -208,8 +208,7 @@ namespace PvP.Commands
                 {
                     NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
 
-                    PvPManagement.pvpPlayers.Remove(plrId);
-                    PvPManagement.bannedPlayers.Add(plrId);
+                    PvPManagement.BanFromPvP(plrId);
 
                     SendManagePlayerList(data.Player);
                 }
@@ -225,7 +224,7 @@ namespace PvP.Commands
                 {
                     NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
 
-                    PvPManagement.bannedPlayers.Remove(plrId);
+                    PvPManagement.UnBanFromPvP(plrId);
 
                     SendManagePlayerList(data.Player);
                 }
