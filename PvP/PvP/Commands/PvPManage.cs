@@ -92,6 +92,10 @@ namespace PvP
                 {
                     row.Add((new NetworkUI.Items.Label(new LabelData("Staff", UnityEngine.Color.blue)), 100));
                 }
+                else if(PvPManagement.IsBanned(plr.ID))
+                {
+                    row.Add((new NetworkUI.Items.Label(new LabelData("BANNED", UnityEngine.Color.yellow)), 100));
+                }
                 else if (PvPManagement.HasPvPEnabled(plr.ID))
                 {
                     row.Add((new NetworkUI.Items.Label(new LabelData("PvP On", UnityEngine.Color.red)), 100));
@@ -101,8 +105,8 @@ namespace PvP
                     row.Add((new NetworkUI.Items.Label(new LabelData("PvP Off", UnityEngine.Color.green)), 100));
                 }
 
-                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: !staffMember), 100));
-                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_BanPlayer", new LabelData("Ban from PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }, isInteractive: !staffMember), 150));
+                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }, isInteractive: !staffMember), 100));
+                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_ChangeBanStatus", new LabelData((PvPManagement.IsBanned(plr.ID) ? "Ban from PvP" : "Unban from PvP"), UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() }, { "returnPlayerList", true } }, isInteractive: !staffMember), 150));
 
                 table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
             }
@@ -249,13 +253,19 @@ namespace PvP
                 }
                 break;
 
-                case "PvPManage_BanPlayer":
+                case "PvPManage_ChangeBanStatus":
                 {
                     NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
 
-                    PvPManagement.BanFromPvP(plrId);
+                    if(PvPManagement.IsBanned(plrId))
+                        PvPManagement.UnBanFromPvP(plrId);
+                    else
+                        PvPManagement.BanFromPvP(plrId);
 
-                    SendManagePlayerList(data.Player);
+                    if (data.ButtonPayload.GetAsOrDefault("returnPlayerList", false))
+                        SendManagePlayerList(data.Player);
+                    else
+                        SendManageBannedList(data.Player);
                 }
                 break;
 
@@ -265,18 +275,9 @@ namespace PvP
                 }
                 break;
 
-                case "PvPManage_UnBanPlayer":
-                {
-                    NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
-
-                    PvPManagement.UnBanFromPvP(plrId);
-
-                    SendManagePlayerList(data.Player);
-                }
-                break;
-
                 case "PvPManage_Log":
                 {
+                    SendPvPLog(data.Player);
                     Chat.Send(data.Player, data.ButtonIdentifier);
                 }
                 break;

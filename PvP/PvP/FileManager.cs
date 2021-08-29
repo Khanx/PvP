@@ -27,10 +27,10 @@ namespace PvP
             if (File.Exists(pvpBannedFile))
                 PvPManagement.LoadBannedPlayers(JsonConvert.DeserializeObject<List<NetworkID>>(File.ReadAllText(pvpBannedFile)));
 
-            if (!File.Exists(pvpAreaFile))
+            if (File.Exists(pvpAreaFile))
                 AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
 
-            if (!File.Exists(pvpLogFile))
+            if (File.Exists(pvpLogFile))
                 PvPManage.killLog = JsonConvert.DeserializeObject<Stack<(NetworkID, NetworkID)>>(File.ReadAllText(pvpLogFile));
         }
 
