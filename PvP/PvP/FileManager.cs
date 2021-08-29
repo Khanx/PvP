@@ -9,7 +9,7 @@ namespace PvP
 {
     public class FileManager : IAfterWorldLoad, IOnAutoSaveWorld, IOnQuit
     {
-        private static string pvpAreaFile, pvpBannedFile, pvpSettingsFile;
+        private static string pvpAreaFile, pvpBannedFile, pvpSettingsFile, pvpLogFile;
 
         public void AfterWorldLoad()
         {
@@ -19,6 +19,7 @@ namespace PvP
             pvpSettingsFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvpsettings.json";
             pvpBannedFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvpbanned.json";
             pvpAreaFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvparea.json";
+            pvpLogFile = "./gamedata/savegames/" + ServerManager.WorldName + "/pvp/pvplog.json";
 
             if (File.Exists(pvpSettingsFile))
                 PvPManagement.settings = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(pvpSettingsFile));
@@ -28,6 +29,9 @@ namespace PvP
 
             if (!File.Exists(pvpAreaFile))
                 AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
+
+            if (!File.Exists(pvpLogFile))
+                PvPManage.killLog = JsonConvert.DeserializeObject<Stack<(NetworkID, NetworkID)>>(File.ReadAllText(pvpLogFile));
         }
 
         private static void SaveData()
@@ -43,6 +47,10 @@ namespace PvP
             string areaJson = JsonConvert.SerializeObject(AreaManager.areas);
 
             File.WriteAllText(pvpAreaFile, areaJson);
+
+            string logJson = JsonConvert.SerializeObject(PvPManage.killLog);
+
+            File.WriteAllText(pvpAreaFile, logJson);
         }
 
         public void OnAutoSaveWorld()

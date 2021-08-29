@@ -6,7 +6,7 @@ using ModLoaderInterfaces;
 
 //This method must be only be available for testing
 #if DEBUG
-namespace PvP.Commands
+namespace PvP
 {
     [ChatCommandAutoLoader]
     public class FakePlayer : IChatCommand, IOnUpdate

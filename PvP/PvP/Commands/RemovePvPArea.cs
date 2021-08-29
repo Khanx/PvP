@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Pipliz;
 
-namespace PvP.Commands
+namespace PvP
 {
     [ChatCommandAutoLoader]
     public class RemovePvPArea : IChatCommand

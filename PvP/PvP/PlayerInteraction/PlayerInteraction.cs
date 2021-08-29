@@ -401,6 +401,7 @@ namespace PvP
             if (attacked.Health <= 0 && attackerPl != null)
             {
                 Chatting.Chat.SendToConnected(attackerPl.Name + " has killed " + attacked.Name);
+                PvPManage.killLog.Push((attackerPl.ID, attacked.ID));
             }
 
             //Reset PvP cooldown

@@ -5,11 +5,13 @@ using ModLoaderInterfaces;
 using Newtonsoft.Json.Linq;
 using Pipliz;
 
-namespace PvP.Commands
+namespace PvP
 {
     [ChatCommandAutoLoader]
     public class PvPManage : IChatCommand, IOnPlayerPushedNetworkUIButton
     {
+        public static Stack<(NetworkID, NetworkID)> killLog = new Stack<(NetworkID, NetworkID)>();
+
         public bool TryDoCommand(Players.Player player, string chat, List<string> splits)
         {
             if (!chat.Trim().ToLower().Equals("/pvpmanage"))
@@ -32,7 +34,7 @@ namespace PvP.Commands
             menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettings", new LabelData("Global Settings", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: PermissionsManager.HasPermission(player, "khanx.pvp.global")));
             menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_PlayerList", new LabelData("Manage Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
             menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_BannedList", new LabelData("Manage Banned Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_Log", new LabelData("Log", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: false));
+            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_Log", new LabelData("Log", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
 
             NetworkMenuManager.SendServerPopup(player, menu);
         }
@@ -146,6 +148,49 @@ namespace PvP.Commands
 
                     table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
                 }
+            }
+
+            menu.Items.Add(table);
+
+            NetworkMenuManager.SendServerPopup(player, menu);
+        }
+
+        public static void SendPvPLog(Players.Player player)
+        {
+            NetworkMenu menu = new NetworkMenu();
+            menu.LocalStorage.SetAs("header", "PvP Log");
+            menu.Width = 500;
+            menu.Height = 600;
+
+            NetworkUI.Items.Table table = new NetworkUI.Items.Table(650, 450)
+            {
+                ExternalMarginHorizontal = 0f
+            };
+
+            {
+                var headerRow = new NetworkUI.Items.HorizontalRow(new List<(IItem, int)>()
+                {
+                    (new NetworkUI.Items.Label("Killer"), 250),
+                    (new NetworkUI.Items.Label("Killed"), 250)
+                });
+                var headerBG = new NetworkUI.Items.BackgroundColor(headerRow, height: -1, color: NetworkUI.Items.Table.HEADER_COLOR);
+                table.Header = headerBG;
+            }
+
+            table.Rows = new List<IItem>();
+
+            foreach (var klog in killLog)
+            {
+                if(Players.TryGetPlayer(klog.Item1, out Players.Player killer))
+                    if (Players.TryGetPlayer(klog.Item2, out Players.Player killed))
+                    {
+                        List<(IItem, int)> row = new List<(IItem, int)>
+                        {
+                            (new NetworkUI.Items.Label(killer.Name), 250),
+                            (new NetworkUI.Items.Label(killed.Name), 250),
+                        };
+                            table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
+                    }
             }
 
             menu.Items.Add(table);

@@ -4,7 +4,7 @@ using Pipliz;
 using System;
 using System.Collections.Generic;
 
-namespace PvP.Commands
+namespace PvP
 {
     [ChatCommandAutoLoader]
     public class PvPOnOff : IChatCommand
