@@ -164,10 +164,10 @@ namespace PvP
         {
             NetworkMenu menu = new NetworkMenu();
             menu.LocalStorage.SetAs("header", "PvP Log");
-            menu.Width = 850;
+            menu.Width = 800;
             menu.Height = 600;
 
-            NetworkUI.Items.Table table = new NetworkUI.Items.Table(650, 800)
+            NetworkUI.Items.Table table = new NetworkUI.Items.Table(800, 450)
             {
                 ExternalMarginHorizontal = 0f
             };
