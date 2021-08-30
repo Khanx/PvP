@@ -66,12 +66,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PvP\AreaManager.cs" />
-    <Compile Include="Commands\CreateNonPvPArea.cs" />
-    <Compile Include="Commands\CreatePvPArea.cs" />
+    <Compile Include="Commands\PvPArea.cs" />
     <Compile Include="Commands\FakePlayer.cs" />
     <Compile Include="Commands\PvPManage.cs" />
     <Compile Include="Commands\PvPOnOff.cs" />
-    <Compile Include="Commands\RemovePvPArea.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="PlayerInteraction\Projectile.cs" />
     <Compile Include="PlayerInteraction\PlayerInteraction.cs" />
