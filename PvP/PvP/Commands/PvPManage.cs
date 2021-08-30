@@ -92,7 +92,7 @@ namespace PvP
                 {
                     row.Add((new NetworkUI.Items.Label(new LabelData("Staff", UnityEngine.Color.blue)), 100));
                 }
-                else if(PvPManagement.IsBanned(plr.ID))
+                else if (PvPManagement.IsBanned(plr.ID))
                 {
                     row.Add((new NetworkUI.Items.Label(new LabelData("BANNED", UnityEngine.Color.yellow)), 100));
                 }
@@ -140,9 +140,9 @@ namespace PvP
 
             table.Rows = new List<IItem>();
 
-            foreach(var plrID in PvPManagement.GetBannedList())
+            foreach (var plrID in PvPManagement.GetBannedList())
             {
-                if(Players.PlayerDatabase.TryGetValue(plrID, out Players.Player plr))
+                if (Players.PlayerDatabase.TryGetValue(plrID, out Players.Player plr))
                 {
                     List<(IItem, int)> row = new List<(IItem, int)>
                     {
@@ -185,7 +185,8 @@ namespace PvP
 
             foreach (var klog in killLog)
             {
-                if(Players.TryGetPlayer(klog.Item1, out Players.Player killer))
+                if (Players.TryGetPlayer(klog.Item1, out Players.Player killer))
+                {
                     if (Players.TryGetPlayer(klog.Item2, out Players.Player killed))
                     {
                         List<(IItem, int)> row = new List<(IItem, int)>
@@ -193,8 +194,9 @@ namespace PvP
                             (new NetworkUI.Items.Label(killer.Name), 250),
                             (new NetworkUI.Items.Label(killed.Name), 250),
                         };
-                            table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
+                        table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
                     }
+                }
             }
 
             menu.Items.Add(table);
@@ -221,19 +223,43 @@ namespace PvP
                     {
                         case 0:
                             Chat.SendToConnected("Now players can decide his PvP Status");
+
+                            for (int i = 0; i < Players.CountConnected; i++)
+                            {
+                                Players.Player plr = Players.GetConnectedByIndex(i);
+                                if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
+                                    PvPManagement.DisablePvP(plr.ID, true);
+                            }
+
                             break;
                         case 1:
-                            Chat.SendToConnected("PvP has been enabled for everyone");
+                            Chat.SendToConnected("PvP has been enabled for everyone.");
+
+                            for (int i = 0; i < Players.CountConnected; i++)
+                            {
+                                Players.Player plr = Players.GetConnectedByIndex(i);
+                                if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
+                                    PvPManagement.EnablePvP(plr.ID);
+                            }
+
                             break;
                         case 2:
-                            Chat.SendToConnected("PvP has been disabled for everyone");
+                            Chat.SendToConnected("PvP has been disabled for everyone.");
+
+                            for (int i = 0; i < Players.CountConnected; i++)
+                            {
+                                Players.Player plr = Players.GetConnectedByIndex(i);
+                                if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
+                                    PvPManagement.DisablePvP(plr.ID, true);
+                            }
+
                             break;
                     }
 
                     SendManageGlobalSettings(data.Player);
                 }
                 break;
-                
+
                 case "PvPManage_PlayerList":
                 {
                     SendManagePlayerList(data.Player);
@@ -257,7 +283,7 @@ namespace PvP
                 {
                     NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
 
-                    if(PvPManagement.IsBanned(plrId))
+                    if (PvPManagement.IsBanned(plrId))
                         PvPManagement.UnBanFromPvP(plrId);
                     else
                         PvPManagement.BanFromPvP(plrId);
