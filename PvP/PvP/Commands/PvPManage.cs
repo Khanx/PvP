@@ -304,7 +304,6 @@ namespace PvP
                 case "PvPManage_Log":
                 {
                     SendPvPLog(data.Player);
-                    Chat.Send(data.Player, data.ButtonIdentifier);
                 }
                 break;
             }
