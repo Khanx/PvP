@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using ModLoaderInterfaces;
 using Newtonsoft.Json.Linq;
 using Pipliz;
+using System;
 
 namespace PvP
 {
     [ChatCommandAutoLoader]
     public class PvPManage : IChatCommand, IOnPlayerPushedNetworkUIButton
     {
-        public static Stack<(NetworkID, NetworkID)> killLog = new Stack<(NetworkID, NetworkID)>();
+        public static Stack<(DateTime, NetworkID, NetworkID)> killLog = new Stack<(DateTime, NetworkID, NetworkID)>();
 
         public bool TryDoCommand(Players.Player player, string chat, List<string> splits)
         {
@@ -163,10 +164,10 @@ namespace PvP
         {
             NetworkMenu menu = new NetworkMenu();
             menu.LocalStorage.SetAs("header", "PvP Log");
-            menu.Width = 500;
+            menu.Width = 850;
             menu.Height = 600;
 
-            NetworkUI.Items.Table table = new NetworkUI.Items.Table(650, 450)
+            NetworkUI.Items.Table table = new NetworkUI.Items.Table(650, 800)
             {
                 ExternalMarginHorizontal = 0f
             };
@@ -174,6 +175,7 @@ namespace PvP
             {
                 var headerRow = new NetworkUI.Items.HorizontalRow(new List<(IItem, int)>()
                 {
+                    (new NetworkUI.Items.Label("Time"), 250),
                     (new NetworkUI.Items.Label("Killer"), 250),
                     (new NetworkUI.Items.Label("Killed"), 250)
                 });
@@ -185,12 +187,13 @@ namespace PvP
 
             foreach (var klog in killLog)
             {
-                if (Players.TryGetPlayer(klog.Item1, out Players.Player killer))
+                if (Players.TryGetPlayer(klog.Item2, out Players.Player killer))
                 {
                     if (Players.TryGetPlayer(klog.Item2, out Players.Player killed))
                     {
                         List<(IItem, int)> row = new List<(IItem, int)>
                         {
+                            (new NetworkUI.Items.Label(klog.Item1.ToString(System.Globalization.CultureInfo.InvariantCulture)), 250),
                             (new NetworkUI.Items.Label(killer.Name), 250),
                             (new NetworkUI.Items.Label(killed.Name), 250),
                         };

@@ -31,7 +31,7 @@ namespace PvP
                 AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
 
             if (File.Exists(pvpLogFile))
-                PvPManage.killLog = JsonConvert.DeserializeObject<Stack<(NetworkID, NetworkID)>>(File.ReadAllText(pvpLogFile));
+                PvPManage.killLog = JsonConvert.DeserializeObject<Stack<(System.DateTime, NetworkID, NetworkID)>>(File.ReadAllText(pvpLogFile));
         }
 
         private static void SaveData()
