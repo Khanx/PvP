@@ -359,6 +359,9 @@ namespace PvP
 
         public static void AttackPlayer(Players.Player attacked, NetworkID attacker, float damage)
         {
+            if (attacked.Health <= 0)
+                return;
+
             if (!PvPManagement.IsInPvP(attacked.ID))
             {
 #if DEBUG
