@@ -1,8 +1,6 @@
 ﻿using Pipliz;
 using System.Collections.Generic;
 using ModLoaderInterfaces;
-using Newtonsoft.Json;
-using System.IO;
 
 namespace PvP
 {
@@ -53,8 +51,11 @@ namespace PvP
                 if (area.Contains(playerPosition))
                 {
                     if (!playersWithinAnArea.ContainsKey(player.ID) || playersWithinAnArea[player.ID] != area.areaType)
-                        Chatting.Chat.Send(player, (area.areaType == AreaType.PvP) ? "You have entered a <color=red>PvP</color> area." : "You have entered a <color=red>Non PvP</color> area.");
+                    {
+                        PvPPlayerSkin.ChangePlayerSkin(player.ID);
 
+                        Chatting.Chat.Send(player, (area.areaType == AreaType.PvP) ? "You have entered a <color=red>PvP</color> area." : "You have entered a <color=red>Non PvP</color> area.");
+                    }
                     playersWithinAnArea[player.ID] = area.areaType;
 
                     return;
@@ -63,8 +64,10 @@ namespace PvP
 
             if (playersWithinAnArea.ContainsKey(player.ID))
             {
-                Chatting.Chat.Send(player, (playersWithinAnArea[player.ID] == AreaType.PvP) ? "You have left the <color=red>PvP</color> area." : "You have left the <color=red>Non PvP</color> area.");
                 playersWithinAnArea.Remove(player.ID);
+                PvPPlayerSkin.ChangePlayerSkin(player.ID);
+
+                Chatting.Chat.Send(player, (playersWithinAnArea[player.ID] == AreaType.PvP) ? "You have left the <color=red>PvP</color> area." : "You have left the <color=red>Non PvP</color> area.");
             }
         }
     }

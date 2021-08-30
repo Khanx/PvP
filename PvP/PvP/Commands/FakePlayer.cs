@@ -34,7 +34,7 @@ namespace PvP
                 b.Write(ClientMessageType.PlayerUpdate);
                 new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
 
-                b.Write(NPC.NPCType.GetByKeyNameOrDefault("pipliz.merchant").Type);
+                b.Write(NPC.NPCType.GetByKeyNameOrDefault("khanx.pvp").Type);
                 b.Write(FKplayer.Position);
                 b.WriteVariable((uint)FKplayer.Rotation.eulerAngles.x);
                 b.WriteVariable((uint)FKplayer.Rotation.eulerAngles.y);
@@ -42,11 +42,12 @@ namespace PvP
 
                 //NO GliDER
                 b.Write(false);
-                //NO COLOR = b.Write(false); & NOT MORE BYTES
-                b.Write(true);
-                b.Write(255);
-                b.Write(0);
-                b.Write(0);
+                b.Write(false);
+                //COLOR
+                //b.Write(true);
+                //b.Write(255);
+                //b.Write(0);
+                //b.Write(0);
 
                 Players.SendToNearby(new Vector3Int(FKplayer.Position), b, 150);
             }
@@ -70,7 +71,7 @@ namespace PvP
                 b.Write(ClientMessageType.PlayerUpdate);
                 new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
 
-                b.Write(NPC.NPCType.GetByKeyNameOrDefault("pipliz.merchant").Type);
+                b.Write(NPC.NPCType.GetByKeyNameOrDefault("khanx.pvp").Type);
                 b.Write(player.Position);
                 b.WriteVariable((uint)player.Rotation.eulerAngles.x);
                 b.WriteVariable((uint)player.Rotation.eulerAngles.y);

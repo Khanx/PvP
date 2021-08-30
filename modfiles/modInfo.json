@@ -27,6 +27,12 @@
 			{
 				"fileType": "addOrOverrideLocalization",
 				"relativePath": "gamedata/localization/es-ES/es-ES.json"
+			},
+			{
+				"fileType" : "addOrReplaceNPCTypes",
+				"index" : -1000000,
+				"relativePath" : "gamedata/npcTypes.json"
+				
 			}
 		]
 	}

@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Chatting;
 using colonyserver.Assets.UIGeneration;
 using ModLoaderInterfaces;
-using Newtonsoft.Json;
 using Pipliz;
 
 namespace PvP
@@ -79,6 +77,8 @@ namespace PvP
             if (verbose)
                 Chat.Send(player, "PvP enabled.");
 
+            PvPPlayerSkin.ChangePlayerSkin(networkID);
+
             return true;
         }
 
@@ -104,6 +104,7 @@ namespace PvP
                 pvpPlayers.Remove(networkID);
 
                 UIManager.RemoveUILabel("PvP_On", player);
+                PvPPlayerSkin.ChangePlayerSkin(networkID);
 
                 if (verbose)
                     Chat.Send(player, "PvP disabled.");
@@ -124,6 +125,7 @@ namespace PvP
                 pvpPlayers.Remove(networkID);
 
                 UIManager.RemoveUILabel("PvP_On", player);
+                PvPPlayerSkin.ChangePlayerSkin(networkID);
 
                 if (verbose)
                     Chat.Send(player, "PvP disabled.");

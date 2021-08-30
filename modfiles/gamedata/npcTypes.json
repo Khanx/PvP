@@ -1,0 +1,14 @@
+[
+	{
+		"data" : {
+			"albedo" : "./textures/pvp_albedo.png",
+			"initialHealth" : 100,
+			"movementSpeed" : 1.3,
+			"normal" : "./textures/pvp_normal.png",
+			"punchCooldownMS" : 2000,
+			"punchDamage" : 30
+		},
+		"keyName" : "khanx.pvp",
+		"npcType" : "monster"
+	}
+]

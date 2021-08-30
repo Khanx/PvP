@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lib.Harmony.2.1.1\lib\net472\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\Archivos de programa\Steam\steamapps\common\Colony Survival\colonyserver_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -73,6 +76,7 @@
     <Compile Include="PlayerInteraction\Projectile.cs" />
     <Compile Include="PlayerInteraction\PlayerInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PvP\PvPPlayerSkin.cs" />
     <Compile Include="PvP\PvPManagement.cs" />
     <Compile Include="PvP\PvPToolType.cs" />
   </ItemGroup>
