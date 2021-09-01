@@ -64,10 +64,10 @@ namespace PvP
 
             if (playersWithinAnArea.ContainsKey(player.ID))
             {
+                Chatting.Chat.Send(player, (playersWithinAnArea[player.ID] == AreaType.PvP) ? "You have left the <color=red>PvP</color> area." : "You have left the <color=red>Non PvP</color> area.");
+
                 playersWithinAnArea.Remove(player.ID);
                 PvPPlayerSkin.ChangePlayerSkin(player.ID);
-
-                Chatting.Chat.Send(player, (playersWithinAnArea[player.ID] == AreaType.PvP) ? "You have left the <color=red>PvP</color> area." : "You have left the <color=red>Non PvP</color> area.");
             }
         }
     }
