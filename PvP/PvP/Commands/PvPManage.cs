@@ -5,6 +5,7 @@ using ModLoaderInterfaces;
 using Newtonsoft.Json.Linq;
 using Pipliz;
 using System;
+using NetworkUI.Items;
 
 namespace PvP
 {
@@ -32,10 +33,10 @@ namespace PvP
             menu.LocalStorage.SetAs("header", "Manage PvP");
             menu.Width = 500;
 
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettings", new LabelData("Global Settings", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: PermissionsManager.HasPermission(player, "khanx.pvp.global")));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_PlayerList", new LabelData("Manage Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_BannedList", new LabelData("Manage Banned Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_Log", new LabelData("Log", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
+            menu.Items.Add(new ButtonCallback("PvPManage_GlobalSettings", new LabelData("Global Settings", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: PermissionsManager.HasPermission(player, "khanx.pvp.global")));
+            menu.Items.Add(new ButtonCallback("PvPManage_PlayerList", new LabelData("Manage Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
+            menu.Items.Add(new ButtonCallback("PvPManage_BannedList", new LabelData("Manage Banned Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
+            menu.Items.Add(new ButtonCallback("PvPManage_Log", new LabelData("Log", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
 
             NetworkMenuManager.SendServerPopup(player, menu);
         }
@@ -46,11 +47,17 @@ namespace PvP
             menu.LocalStorage.SetAs("header", "Manage Global Settings");
             menu.Width = 500;
 
+            menu.Items.Add(new HorizontalRow(new List<(IItem, int)>
+            {
+                (new ButtonCallback("PvPManage_Manage", new LabelData("<", UnityEngine.Color.white), 35), 35),
+                (new EmptySpace(), 500)
+            }, 35, 0f, 0f, 0f));
+
             int status = PvPManagement.settings.GetValueOrDefault("GlobalPvP", 0);
 
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("Normal PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 0 } }, isInteractive: 0 != status));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP On for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 1 } }, isInteractive: 1 != status));
-            menu.Items.Add(new NetworkUI.Items.ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP Off for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 2 } }, isInteractive: 2 != status));
+            menu.Items.Add(new ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("Normal PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 0 } }, isInteractive: 0 != status));
+            menu.Items.Add(new ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP On for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 1 } }, isInteractive: 1 != status));
+            menu.Items.Add(new ButtonCallback("PvPManage_GlobalSettingsPvPStatus", new LabelData("PvP Off for everyone", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "status", 2 } }, isInteractive: 2 != status));
 
             NetworkMenuManager.SendServerPopup(player, menu);
         }
@@ -62,20 +69,26 @@ namespace PvP
             menu.Width = 650;
             menu.Height = 600;
 
-            NetworkUI.Items.Table table = new NetworkUI.Items.Table(650, 500)
+            menu.Items.Add(new HorizontalRow(new List<(IItem, int)>
+            {
+                (new ButtonCallback("PvPManage_Manage", new LabelData("<", UnityEngine.Color.white), 35), 35),
+                (new EmptySpace(), 500)
+            }, 35, 0f, 0f, 0f));
+
+            Table table = new Table(650, 500)
             {
                 ExternalMarginHorizontal = 0f
             };
 
             {
-                var headerRow = new NetworkUI.Items.HorizontalRow(new List<(IItem, int)>()
+                var headerRow = new HorizontalRow(new List<(IItem, int)>()
                 {
-                    (new NetworkUI.Items.Label("Name"), 250),
-                    (new NetworkUI.Items.Label("Status"), 100),     //PvP On, PvP Off, Staff
-                    (new NetworkUI.Items.EmptySpace(), 100),     //Enable / Disable PvP
-                    (new NetworkUI.Items.EmptySpace(), 150)     //Ban from PvP
+                    (new Label("Name"), 250),
+                    (new Label("Status"), 100),     //PvP On, PvP Off, Staff
+                    (new EmptySpace(), 100),     //Enable / Disable PvP
+                    (new EmptySpace(), 150)     //Ban from PvP
                 });
-                var headerBG = new NetworkUI.Items.BackgroundColor(headerRow, height: -1, color: NetworkUI.Items.Table.HEADER_COLOR);
+                var headerBG = new BackgroundColor(headerRow, height: -1, color: NetworkUI.Items.Table.HEADER_COLOR);
                 table.Header = headerBG;
             }
 
@@ -87,29 +100,29 @@ namespace PvP
                 bool staffMember = PermissionsManager.HasPermission(plr, "khanx.pvp");
 
                 List<(IItem, int)> row = new List<(IItem, int)>();
-                row.Add((new NetworkUI.Items.Label(plr.Name), 250));
+                row.Add((new Label(plr.Name), 250));
 
                 if (staffMember)
                 {
-                    row.Add((new NetworkUI.Items.Label(new LabelData("Staff", UnityEngine.Color.blue)), 100));
+                    row.Add((new Label(new LabelData("Staff", UnityEngine.Color.blue)), 100));
                 }
                 else if (PvPManagement.IsBanned(plr.ID))
                 {
-                    row.Add((new NetworkUI.Items.Label(new LabelData("BANNED", UnityEngine.Color.yellow)), 100));
+                    row.Add((new Label(new LabelData("BANNED", UnityEngine.Color.yellow)), 100));
                 }
                 else if (PvPManagement.HasPvPEnabled(plr.ID))
                 {
-                    row.Add((new NetworkUI.Items.Label(new LabelData("PvP On", UnityEngine.Color.red)), 100));
+                    row.Add((new Label(new LabelData("PvP On", UnityEngine.Color.red)), 100));
                 }
                 else
                 {
-                    row.Add((new NetworkUI.Items.Label(new LabelData("PvP Off", UnityEngine.Color.green)), 100));
+                    row.Add((new Label(new LabelData("PvP Off", UnityEngine.Color.green)), 100));
                 }
 
-                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }, isInteractive: !staffMember), 100));
-                row.Add((new NetworkUI.Items.ButtonCallback("PvPManage_ChangeBanStatus", new LabelData((PvPManagement.IsBanned(plr.ID) ? "Ban from PvP" : "Unban from PvP"), UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() }, { "returnPlayerList", true } }, isInteractive: !staffMember), 150));
+                row.Add((new ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }, isInteractive: !staffMember), 100));
+                row.Add((new ButtonCallback("PvPManage_ChangeBanStatus", new LabelData((PvPManagement.IsBanned(plr.ID) ? "Ban from PvP" : "Unban from PvP"), UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() }, { "returnPlayerList", true } }, isInteractive: !staffMember), 150));
 
-                table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
+                table.Rows.Add(new HorizontalRow(row));
             }
 
             menu.Items.Add(table);
@@ -124,18 +137,18 @@ namespace PvP
             menu.Width = 500;
             menu.Height = 600;
 
-            NetworkUI.Items.Table table = new NetworkUI.Items.Table(650, 450)
+            Table table = new Table(650, 450)
             {
                 ExternalMarginHorizontal = 0f
             };
 
             {
-                var headerRow = new NetworkUI.Items.HorizontalRow(new List<(IItem, int)>()
+                var headerRow = new HorizontalRow(new List<(IItem, int)>()
                 {
-                    (new NetworkUI.Items.Label("Name"), 250),
-                    (new NetworkUI.Items.EmptySpace(), 150)     //UnBan from PvP
+                    (new Label("Name"), 250),
+                    (new EmptySpace(), 150)     //UnBan from PvP
                 });
-                var headerBG = new NetworkUI.Items.BackgroundColor(headerRow, height: -1, color: NetworkUI.Items.Table.HEADER_COLOR);
+                var headerBG = new BackgroundColor(headerRow, height: -1, color: NetworkUI.Items.Table.HEADER_COLOR);
                 table.Header = headerBG;
             }
 
@@ -147,11 +160,11 @@ namespace PvP
                 {
                     List<(IItem, int)> row = new List<(IItem, int)>
                     {
-                        (new NetworkUI.Items.Label(plr.Name), 250),
-                        (new NetworkUI.Items.ButtonCallback("PvPManage_UnBanPlayer", new LabelData("Unban from PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }), 150)
+                        (new Label(plr.Name), 250),
+                        (new ButtonCallback("PvPManage_UnBanPlayer", new LabelData("Unban from PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }), 150)
                     };
 
-                    table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
+                    table.Rows.Add(new HorizontalRow(row));
                 }
             }
 
@@ -167,19 +180,25 @@ namespace PvP
             menu.Width = 800;
             menu.Height = 600;
 
-            NetworkUI.Items.Table table = new NetworkUI.Items.Table(800, 450)
+            menu.Items.Add(new HorizontalRow(new List<(IItem, int)>
+            {
+                (new ButtonCallback("PvPManage_Manage", new LabelData("<", UnityEngine.Color.white), 35), 35),
+                (new EmptySpace(), 500)
+            }, 35, 0f, 0f, 0f));
+
+            Table table = new Table(800, 450)
             {
                 ExternalMarginHorizontal = 0f
             };
 
             {
-                var headerRow = new NetworkUI.Items.HorizontalRow(new List<(IItem, int)>()
+                var headerRow = new HorizontalRow(new List<(IItem, int)>()
                 {
-                    (new NetworkUI.Items.Label("Time"), 250),
-                    (new NetworkUI.Items.Label("Killer"), 250),
-                    (new NetworkUI.Items.Label("Killed"), 250)
+                    (new Label("Time"), 250),
+                    (new Label("Killer"), 250),
+                    (new Label("Killed"), 250)
                 });
-                var headerBG = new NetworkUI.Items.BackgroundColor(headerRow, height: -1, color: NetworkUI.Items.Table.HEADER_COLOR);
+                var headerBG = new BackgroundColor(headerRow, height: -1, color: NetworkUI.Items.Table.HEADER_COLOR);
                 table.Header = headerBG;
             }
 
@@ -193,11 +212,11 @@ namespace PvP
                     {
                         List<(IItem, int)> row = new List<(IItem, int)>
                         {
-                            (new NetworkUI.Items.Label(klog.Item1.ToString(System.Globalization.CultureInfo.InvariantCulture)), 250),
-                            (new NetworkUI.Items.Label(killer.Name), 250),
-                            (new NetworkUI.Items.Label(killed.Name), 250),
+                            (new Label(klog.Item1.ToString(System.Globalization.CultureInfo.InvariantCulture)), 250),
+                            (new Label(killer.Name), 250),
+                            (new Label(killed.Name), 250),
                         };
-                        table.Rows.Add(new NetworkUI.Items.HorizontalRow(row));
+                        table.Rows.Add(new HorizontalRow(row));
                     }
                 }
             }
@@ -211,6 +230,12 @@ namespace PvP
         {
             switch (data.ButtonIdentifier)
             {
+                case "PvPManage_Manage":
+                {
+                    SendManageMenu(data.Player);
+                }
+                break;
+
                 case "PvPManage_GlobalSettings":
                 {
                     SendManageGlobalSettings(data.Player);
