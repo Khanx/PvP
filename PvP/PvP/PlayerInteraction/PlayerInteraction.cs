@@ -61,9 +61,9 @@ namespace PvP
             TimeBetweenAttacks[(int)Weapon.IronSword]       = 500L;
             TimeBetweenAttacks[(int)Weapon.SteelSword]      = 500L;
 
-            TimeBetweenAttacks[(int)Weapon.BronzeSpear]     = 500L;
-            TimeBetweenAttacks[(int)Weapon.IronSpear]       = 500L;
-            TimeBetweenAttacks[(int)Weapon.SteelSpear]      = 500L;
+            TimeBetweenAttacks[(int)Weapon.BronzeSpear]     = 750L;
+            TimeBetweenAttacks[(int)Weapon.IronSpear]       = 750L;
+            TimeBetweenAttacks[(int)Weapon.SteelSpear]      = 750L;
 
             TimeBetweenAttacks[(int)Weapon.BronzeMace]      = 1000L;
             TimeBetweenAttacks[(int)Weapon.IronMace]        = 1000L;

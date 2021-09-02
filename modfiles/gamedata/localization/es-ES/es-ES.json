@@ -23,9 +23,9 @@
 		"Khanx.PvPIronSword": "Daño: 75\n Cooldown: 0,5s\n Rango: 2 blocks",
 		"Khanx.PvPSteelSword": "Daño: 100\n Cooldown: 0,5s\n Rango: 2 blocks",
 		
-		"Khanx.PvPBronzeSpear": "Daño: 25\n Cooldown: 0,5s\n Rango: 4 blocks",
-		"Khanx.PvPIronSpear": "Daño: 50\n Cooldown: 0,5s\n Rango: 4 blocks",
-		"Khanx.PvPSteelSpear": "Daño: 75\n Cooldown: 0,5s\n Rango: 4 blocks",
+		"Khanx.PvPBronzeSpear": "Daño: 25\n Cooldown: 0,75s\n Rango: 4 blocks",
+		"Khanx.PvPIronSpear": "Daño: 50\n Cooldown: 0,75s\n Rango: 4 blocks",
+		"Khanx.PvPSteelSpear": "Daño: 75\n Cooldown: 0,75s\n Rango: 4 blocks",
 		
 		"Khanx.PvPBronzeMace": "Daño: 100\n Cooldown: 1s\n Rango: 2 blocks",
 		"Khanx.PvPIronMace": "Daño: 150\n Cooldown: 1s\n Rango: 2 blocks",
