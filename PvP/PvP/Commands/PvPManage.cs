@@ -77,7 +77,7 @@ namespace PvP
                 (new EmptySpace(), 500)
             }, 35, 0f, 0f, 0f));
 
-            Table table = new Table(650, 500)
+            Table table = new Table(800, 450)
             {
                 ExternalMarginHorizontal = 0f
             };
@@ -145,7 +145,7 @@ namespace PvP
                 (new EmptySpace(), 500)
             }, 35, 0f, 0f, 0f));
 
-            Table table = new Table(650, 450)
+            Table table = new Table(800, 450)
             {
                 ExternalMarginHorizontal = 0f
             };
