@@ -31,7 +31,8 @@ namespace PvP
         {
             NetworkMenu menu = new NetworkMenu();
             menu.LocalStorage.SetAs("header", "Manage PvP");
-            menu.Width = 500;
+            menu.Width = 800;
+            menu.Height = 600;
 
             menu.Items.Add(new ButtonCallback("PvPManage_GlobalSettings", new LabelData("Global Settings", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, isInteractive: PermissionsManager.HasPermission(player, "khanx.pvp.global")));
             menu.Items.Add(new ButtonCallback("PvPManage_PlayerList", new LabelData("Manage Players", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup));
@@ -45,7 +46,8 @@ namespace PvP
         {
             NetworkMenu menu = new NetworkMenu();
             menu.LocalStorage.SetAs("header", "Manage Global Settings");
-            menu.Width = 500;
+            menu.Width = 800;
+            menu.Height = 600;
 
             menu.Items.Add(new HorizontalRow(new List<(IItem, int)>
             {
@@ -66,7 +68,7 @@ namespace PvP
         {
             NetworkMenu menu = new NetworkMenu();
             menu.LocalStorage.SetAs("header", "Manage PvP Players");
-            menu.Width = 650;
+            menu.Width = 800;
             menu.Height = 600;
 
             menu.Items.Add(new HorizontalRow(new List<(IItem, int)>
@@ -134,8 +136,14 @@ namespace PvP
         {
             NetworkMenu menu = new NetworkMenu();
             menu.LocalStorage.SetAs("header", "Manage Banned Players");
-            menu.Width = 500;
+            menu.Width = 800;
             menu.Height = 600;
+
+            menu.Items.Add(new HorizontalRow(new List<(IItem, int)>
+            {
+                (new ButtonCallback("PvPManage_Manage", new LabelData("<", UnityEngine.Color.white), 35), 35),
+                (new EmptySpace(), 500)
+            }, 35, 0f, 0f, 0f));
 
             Table table = new Table(650, 450)
             {
