@@ -216,7 +216,7 @@ namespace PvP
             {
                 if (Players.TryGetPlayer(klog.Item2, out Players.Player killer))
                 {
-                    if (Players.TryGetPlayer(klog.Item2, out Players.Player killed))
+                    if (Players.TryGetPlayer(klog.Item3, out Players.Player killed))
                     {
                         List<(IItem, int)> row = new List<(IItem, int)>
                         {
