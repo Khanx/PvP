@@ -91,7 +91,7 @@ namespace PvP
         {
             Players.Player player = Players.GetPlayer(networkID);
 
-            if (pvpPlayers.ContainsKey(networkID))
+            if (!pvpPlayers.ContainsKey(networkID))
             {
                 if (verbose)
                     Chat.Send(player, "PvP disabled.");
