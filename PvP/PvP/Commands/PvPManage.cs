@@ -96,9 +96,9 @@ namespace PvP
 
             table.Rows = new List<IItem>();
 
-            for (int i = 0; i < Players.CountConnected; i++)
+            for (int i = 0; i < Players.ConnectedPlayers.Count; i++)
             {
-                Players.Player plr = Players.GetConnectedByIndex(i);
+                Players.Player plr = Players.ConnectedPlayers[i];
                 bool staffMember = PermissionsManager.HasPermission(plr, "khanx.pvp");
 
                 List<(IItem, int)> row = new List<(IItem, int)>();
@@ -260,9 +260,9 @@ namespace PvP
                         case 0:
                             Chat.SendToConnected("Now players can decide his PvP Status");
 
-                            for (int i = 0; i < Players.CountConnected; i++)
+                            for (int i = 0; i < Players.ConnectedPlayers.Count; i++)
                             {
-                                Players.Player plr = Players.GetConnectedByIndex(i);
+                                Players.Player plr = Players.ConnectedPlayers[i];
                                 if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
                                     PvPManagement.DisablePvP(plr.ID, true);
                             }
@@ -271,9 +271,9 @@ namespace PvP
                         case 1:
                             Chat.SendToConnected("PvP has been enabled for everyone.");
 
-                            for (int i = 0; i < Players.CountConnected; i++)
+                            for (int i = 0; i < Players.ConnectedPlayers.Count; i++)
                             {
-                                Players.Player plr = Players.GetConnectedByIndex(i);
+                                Players.Player plr = Players.ConnectedPlayers[i];
                                 if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
                                     PvPManagement.EnablePvP(plr.ID);
                             }
@@ -282,9 +282,9 @@ namespace PvP
                         case 2:
                             Chat.SendToConnected("PvP has been disabled for everyone.");
 
-                            for (int i = 0; i < Players.CountConnected; i++)
+                            for (int i = 0; i < Players.ConnectedPlayers.Count; i++)
                             {
-                                Players.Player plr = Players.GetConnectedByIndex(i);
+                                Players.Player plr = Players.ConnectedPlayers[i];
                                 if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
                                     PvPManagement.DisablePvP(plr.ID, true);
                             }
@@ -324,7 +324,7 @@ namespace PvP
                     else
                         PvPManagement.BanFromPvP(plrId);
 
-                    if (data.ButtonPayload.GetAsOrDefault("returnPlayerList", false))
+                    if (data.ButtonPayload is JObject jobject && jobject.GetAsOrDefault("returnPlayerList", false))
                         SendManagePlayerList(data.Player);
                     else
                         SendManageBannedList(data.Player);

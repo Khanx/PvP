@@ -55,12 +55,12 @@ namespace PvP
 
             foreach (var area in AreaManager.areas)
             {
-                list.Add(new AreaJobTracker.AreaHighlight(area.min, area.max, Shared.EAreaMeshType.AutoSelect, Shared.EServerAreaType.ConstructionArea));
+                list.Add(new AreaJobTracker.AreaHighlight() {Minimum = area.min, Maximum = area.max, MeshType = Shared.EAreaMeshType.AutoSelect, AreaType = Shared.EServerAreaType.ConstructionArea });
             }
 
             var areaP = playerArea.GetValueOrDefault(player.ID, new Area(Vector3Int.invalidPos, Vector3Int.invalidPos, AreaType.NotDefined));
 
-            list.Add(new AreaJobTracker.AreaHighlight(Vector3Int.Min(areaP.min, areaP.max), Vector3Int.Max(areaP.min, areaP.max), Shared.EAreaMeshType.AutoSelect, Shared.EServerAreaType.ConstructionArea));
+            list.Add(new AreaJobTracker.AreaHighlight() {Minimum = Vector3Int.Min(areaP.min, areaP.max), Maximum = Vector3Int.Max(areaP.min, areaP.max), MeshType = Shared.EAreaMeshType.AutoSelect, AreaType = Shared.EServerAreaType.ConstructionArea });
         }
     }
 }

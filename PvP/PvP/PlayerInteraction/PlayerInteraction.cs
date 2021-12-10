@@ -187,9 +187,9 @@ namespace PvP
             foreach (Players.Player pl in Players.PlayerDatabase.Values)
             {
 #else
-            for (int i = 0; i < Players.CountConnected; i++)
+            for (int i = 0; i < Players.ConnectedPlayers.Count; i++)
             {
-                Players.Player pl = Players.GetConnectedByIndex(i);
+                Players.Player pl = Players.ConnectedPlayers[i];
 #endif
                 //A plater cannot hit himself
                 if (pl.Equals(player))
@@ -281,7 +281,7 @@ namespace PvP
 
                 if (monster != null)
                 {
-                    Bounds monsterBounds = new Bounds(monster.Position + new Vector3(0, 0.5f, 0), new Vector3(1.25f, 2.25f, 0.5f));
+                    Bounds monsterBounds = new Bounds(new Vector3(monster.Position.x, monster.Position.y, monster.Position.z) + new Vector3(0, 0.5f, 0), new Vector3(1.25f, 2.25f, 0.5f));
 
                     if (monsterBounds.IntersectRay(ray))
                     {
@@ -314,9 +314,9 @@ namespace PvP
                 foreach (Players.Player pl in Players.PlayerDatabase.Values)
                 {
 #else
-                    for (int j = 0; j < Players.CountConnected; j++)
+                    for (int j = 0; j < Players.ConnectedPlayers.Count; j++)
                 {
-                        Players.Player pl = Players.GetConnectedByIndex(j);
+                        Players.Player pl = Players.ConnectedPlayers[j];
 #endif
                     //A player cannot shoot himself
                     if (pl.ID.Equals(projectile.shooter))
