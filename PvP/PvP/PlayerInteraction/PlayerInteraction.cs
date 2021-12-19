@@ -394,6 +394,8 @@ namespace PvP
             Players.TryGetPlayer(attacker, out Players.Player attackerPl);
             Players.TakeHit(attacked, damage * damageModifier, attackerPl, ModLoader.OnHitData.EHitSourceType.PlayerClick);
 
+            HitMessage.ShowMessage(attackerPl, damage.ToString());
+
 #if DEBUG
             if (attackerPl != null)
                 Chatting.Chat.SendToConnected(attackerPl.Name + " deals " + damage * damageModifier + " damage to " + attacked.Name);
