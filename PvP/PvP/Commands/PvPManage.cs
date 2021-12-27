@@ -122,7 +122,7 @@ namespace PvP
                 }
 
                 row.Add((new ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }, isInteractive: !staffMember), 100));
-                row.Add((new ButtonCallback("PvPManage_ChangeBanStatus", new LabelData((PvPManagement.IsBanned(plr.ID) ? "Ban from PvP" : "Unban from PvP"), UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() }, { "returnPlayerList", true } }, isInteractive: !staffMember), 150));
+                row.Add((new ButtonCallback("PvPManage_ChangeBanStatus", new LabelData((PvPManagement.IsBanned(plr.ID) ? "Unban from PvP" : "Ban from PvP"), UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() }, { "returnPlayerList", true } }, isInteractive: !staffMember), 150));
 
                 table.Rows.Add(new HorizontalRow(row));
             }

@@ -1,11 +1,12 @@
-﻿using colonyserver.Assets.UIGeneration;
+﻿using Pipliz;
+
 using ModLoaderInterfaces;
-using Pipliz;
+
+using colonyserver.Assets.UIGeneration;
+
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PvP
 {
