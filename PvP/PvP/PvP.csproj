@@ -67,7 +67,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlayerInteraction\Healing.cs" />
+    <Compile Include="Game\BattleGround.cs" />
+    <Compile Include="Game\BattlegroundMgr.cs" />
+    <Compile Include="Game\RespawnMgr.cs" />
     <Compile Include="PlayerInteraction\HitMessage.cs" />
     <Compile Include="PvP\AreaManager.cs" />
     <Compile Include="Commands\PvPArea.cs" />

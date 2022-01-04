@@ -42,7 +42,7 @@ namespace PvP
 
             if (AreaManager.playersWithinAnArea.TryGetValue(networkID, out AreaType area))
             {
-                return area == AreaType.PvP;
+                return area == AreaType.PvP || area == AreaType.BattleGround;
             }
 
             return pvpPlayers.ContainsKey(networkID);

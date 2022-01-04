@@ -17,7 +17,7 @@ namespace PvP
 
             if (splits.Count == 1 || splits.Count > 2)
             {
-                Chat.Send(player, "<color=red>Syntax error, use /pvparea pvp/nonpvp/remove</color>");
+                Chat.Send(player, "<color=red>Syntax error, use /pvparea pvp/nonpvp/remove/battleground</color>");
                 return true;
             }
 
@@ -46,6 +46,10 @@ namespace PvP
                 case "nonpvp":
                     TryCreateArea(player, AreaType.NonPvP);
                     break;
+                case "battleground":
+                    if(TryCreateArea(player, AreaType.BattleGround))
+                        throw new System.NotImplementedException();
+                    break;
                 default:
                     Chat.Send(player, "<color=red>Syntax error, use /pvparea pvp/nonpvp/remove</color>");
                     break;
@@ -54,13 +58,13 @@ namespace PvP
             return true;
         }
 
-        private static void TryCreateArea(Players.Player player, AreaType areaType)
+        private static bool TryCreateArea(Players.Player player, AreaType areaType)
         {
             if (!PvPToolType.playerArea.TryGetValue(player.ID, out Area area))
             {
                 Chat.Send(player, "<color=red>You have not created any area, you must use the PvP Tool to create the area.</color>");
 
-                return;
+                return false;
             }
 
             Vector3Int corner1 = area.min;
@@ -74,7 +78,7 @@ namespace PvP
             {
                 Chat.Send(player, "<color=red>You must be inside the area to be able to create it.</ color>");
 
-                return;
+                return false;
             }
 
             foreach (var area2 in AreaManager.areas)
@@ -83,13 +87,27 @@ namespace PvP
                 {
                     Chat.Send(player, "<color=red>There should be no intersection of areas.</ color>");
 
-                    return;
+                    return false;
                 }
             }
 
             PvPToolType.playerArea.Remove(player.ID);
             AreaManager.areas.Add(area);
-            Chat.Send(player, "<color=green>" + ((areaType == AreaType.PvP) ? "PvP" : "Non PvP") + " area created</color>");
+
+            switch (areaType)
+            {
+                case AreaType.PvP:
+                    Chat.Send(player, "<color=green>PvP area created</color>");
+                    break;
+                case AreaType.BattleGround:
+                    Chat.Send(player, "<color=green>BattleGround area created</color>");
+                    break;
+                case AreaType.NonPvP:
+                    Chat.Send(player, "<color=green>NonPvP area created</color>");
+                    break;
+            }
+
+            return true;
         }
     }
 }
