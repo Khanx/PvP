@@ -20,7 +20,7 @@ namespace PvP
                 return true;
             }
 
-            if(PvPManagement.IsBanned(player.ID))
+            if(PvPManagement.IsBanned(player.ID.ID))
             {
                 Chat.Send(player, "You are banned from PvP.");
 
@@ -29,11 +29,11 @@ namespace PvP
 
             if (splits[1].ToLower().Equals("on"))
             {
-                PvPManagement.EnablePvP(player.ID);
+                PvPManagement.EnablePvP(player.ID.ID);
             }
             else if (splits[1].ToLower().Equals("off"))
             {
-                PvPManagement.DisablePvP(player.ID);
+                PvPManagement.DisablePvP(player.ID.ID);
             }
 
             return true;

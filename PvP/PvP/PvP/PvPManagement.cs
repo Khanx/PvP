@@ -10,9 +10,9 @@ namespace PvP
     {
         public static long timeBeforeDisablingPvP = 2L * 60L * 1000L; // 2 min -> It should be configurable
         //There are specific behaviour that must be executed when enabling / disabling PvP
-        private static readonly Dictionary<NetworkID, ServerTimeStamp> pvpPlayers = new Dictionary<NetworkID, ServerTimeStamp>();
+        private static readonly Dictionary<Players.PlayerIDShort, ServerTimeStamp> pvpPlayers = new Dictionary<Players.PlayerIDShort, ServerTimeStamp>();
 
-        private static List<NetworkID> bannedPlayers = new List<NetworkID>();
+        private static List<Players.PlayerIDShort> bannedPlayers = new List<Players.PlayerIDShort>();
         public static Dictionary<string, int> settings = new Dictionary<string, int>();
 
         /// <summary>
@@ -20,11 +20,11 @@ namespace PvP
         /// 
         /// For example: A player with PvP disabled in a force PvP will return false despite of being able to receive damage
         /// </summary>
-        /// <param name="networkID"></param>
+        /// <param name="playerID"></param>
         /// <returns></returns>
-        public static bool HasPvPEnabled(NetworkID networkID)
+        public static bool HasPvPEnabled(Players.PlayerIDShort playerID)
         {
-            return pvpPlayers.ContainsKey(networkID);
+            return pvpPlayers.ContainsKey(playerID);
         }
 
         /// <summary>
@@ -32,27 +32,27 @@ namespace PvP
         /// 
         /// This happens when the player is inside of a PvP Area or the settins of PvP forces PvP to everyone
         /// </summary>
-        /// <param name="networkID"></param>
+        /// <param name="playerID"></param>
         /// <returns></returns>
-        public static bool IsInPvP(NetworkID networkID)
+        public static bool IsInPvP(Players.PlayerIDShort playerID)
         {
             //Staff members only have PvP enable IF they enable it
-            if (PermissionsManager.HasPermission(Players.GetPlayer(networkID), "khanx.pvp") && !pvpPlayers.ContainsKey(networkID) || IsBanned(networkID))
+            if (PermissionsManager.HasPermission(Extender.GetPlayer(playerID), "khanx.pvp") && !pvpPlayers.ContainsKey(playerID) || IsBanned(playerID))
                 return false;
 
-            if (AreaManager.playersWithinAnArea.TryGetValue(networkID, out AreaType area))
+            if (AreaManager.playersWithinAnArea.TryGetValue(playerID, out AreaType area))
             {
                 return area == AreaType.PvP;
             }
 
-            return pvpPlayers.ContainsKey(networkID);
+            return pvpPlayers.ContainsKey(playerID);
         }
 
-        public static bool EnablePvP(NetworkID networkID, bool verbose = true)
+        public static bool EnablePvP(Players.PlayerIDShort playerID, bool verbose = true)
         {
-            Players.Player player = Players.GetPlayer(networkID);
+            Players.Player player = Extender.GetPlayer(playerID);
 
-            if (IsBanned(networkID))
+            if (IsBanned(playerID))
             {
                 if(verbose)
                     Chat.Send(player, "You cannot enable PvP because you are banned.");
@@ -68,8 +68,8 @@ namespace PvP
                 return false;
             }
 
-            if (!pvpPlayers.ContainsKey(networkID))
-                pvpPlayers[networkID] = ServerTimeStamp.Now;
+            if (!pvpPlayers.ContainsKey(playerID))
+                pvpPlayers[playerID] = ServerTimeStamp.Now;
 
             UIManager.AddorUpdateUILabel("PvP_On", colonyshared.NetworkUI.UIGeneration.UIElementDisplayType.Global, "PvP ON",
                                         new Vector3Int(100, -100, 100), colonyshared.NetworkUI.AnchorPresets.TopLeft,
@@ -77,21 +77,21 @@ namespace PvP
             if (verbose)
                 Chat.Send(player, "PvP enabled.");
 
-            PvPPlayerSkin.ChangePlayerSkin(networkID);
+            PvPPlayerSkin.ChangePlayerSkin(playerID);
 
             return true;
         }
 
-        public static void ResetPvPCoolDown(NetworkID networkID)
+        public static void ResetPvPCoolDown(Players.PlayerIDShort playerID)
         {
-            pvpPlayers[networkID] = ServerTimeStamp.Now;
+            pvpPlayers[playerID] = ServerTimeStamp.Now;
         }
 
-        public static bool DisablePvP(NetworkID networkID, bool forceChange = false, bool verbose = true)
+        public static bool DisablePvP(Players.PlayerIDShort playerID, bool forceChange = false, bool verbose = true)
         {
-            Players.Player player = Players.GetPlayer(networkID);
+            Players.Player player = Extender.GetPlayer(playerID);
 
-            if (!pvpPlayers.ContainsKey(networkID))
+            if (!pvpPlayers.ContainsKey(playerID))
             {
                 if (verbose)
                     Chat.Send(player, "PvP disabled.");
@@ -99,12 +99,12 @@ namespace PvP
                 return true;
             }
 
-            if (PermissionsManager.HasPermission(Players.GetPlayer(networkID), "khanx.pvp") || forceChange)
+            if (PermissionsManager.HasPermission(Extender.GetPlayer(playerID), "khanx.pvp") || forceChange)
             {
-                pvpPlayers.Remove(networkID);
+                pvpPlayers.Remove(playerID);
 
                 UIManager.RemoveUILabel("PvP_On", player);
-                PvPPlayerSkin.ChangePlayerSkin(networkID);
+                PvPPlayerSkin.ChangePlayerSkin(playerID);
 
                 if (verbose)
                     Chat.Send(player, "PvP disabled.");
@@ -120,12 +120,12 @@ namespace PvP
                 return true;
             }
 
-            if (pvpPlayers.TryGetValue(networkID, out ServerTimeStamp time) && time.TimeSinceThis > timeBeforeDisablingPvP)
+            if (pvpPlayers.TryGetValue(playerID, out ServerTimeStamp time) && time.TimeSinceThis > timeBeforeDisablingPvP)
             {
-                pvpPlayers.Remove(networkID);
+                pvpPlayers.Remove(playerID);
 
                 UIManager.RemoveUILabel("PvP_On", player);
-                PvPPlayerSkin.ChangePlayerSkin(networkID);
+                PvPPlayerSkin.ChangePlayerSkin(playerID);
 
                 if (verbose)
                     Chat.Send(player, "PvP disabled.");
@@ -133,7 +133,7 @@ namespace PvP
                 return true;
             }
 
-            System.TimeSpan t = System.TimeSpan.FromMilliseconds((double)(timeBeforeDisablingPvP - pvpPlayers[player.ID].TimeSinceThis));
+            System.TimeSpan t = System.TimeSpan.FromMilliseconds((double)(timeBeforeDisablingPvP - pvpPlayers[player.ID.ID].TimeSinceThis));
 
             string timeToDisable;
             if (t.Minutes != 0)
@@ -147,43 +147,43 @@ namespace PvP
             return false;
         }
 
-        public static void LoadBannedPlayers(List<NetworkID> bannedPlayersList)
+        public static void LoadBannedPlayers(List<Players.PlayerIDShort> bannedPlayersList)
         {
             bannedPlayers = bannedPlayersList;
         }
 
-        public static bool IsBanned(NetworkID networkID)
+        public static bool IsBanned(Players.PlayerIDShort playerID)
         {
-            return bannedPlayers.Contains(networkID);
+            return bannedPlayers.Contains(playerID);
         }
 
-        public static List<NetworkID> GetBannedList()
+        public static List<Players.PlayerIDShort> GetBannedList()
         {
             return bannedPlayers;
         }
 
-        public static void BanFromPvP(NetworkID networkID, bool verbose = true)
+        public static void BanFromPvP(Players.PlayerIDShort playerID, bool verbose = true)
         {
-            bannedPlayers.Add(networkID);
-            DisablePvP(networkID, true, false);
+            bannedPlayers.Add(playerID);
+            DisablePvP(playerID, true, false);
 
             if(verbose)
-                Chat.Send(Players.GetPlayer(networkID), "You have been banned from PvP");
+                Chat.Send(Extender.GetPlayer(playerID), "You have been banned from PvP");
         }
 
-        public static void UnBanFromPvP(NetworkID networkID, bool verbose = true)
+        public static void UnBanFromPvP(Players.PlayerIDShort playerID, bool verbose = true)
         {
-            bannedPlayers.Remove(networkID);
+            bannedPlayers.Remove(playerID);
 
             if (verbose)
-                Chat.Send(Players.GetPlayer(networkID), "You have been unbanned from PvP");
+                Chat.Send(Extender.GetPlayer(playerID), "You have been unbanned from PvP");
         }
 
         public void OnPlayerConnectedLate(Players.Player player)
         {
-            if (PermissionsManager.HasPermission(player, "khanx.pvp") || IsBanned(player.ID))
+            if (PermissionsManager.HasPermission(player, "khanx.pvp") || IsBanned(player.ID.ID))
             {
-                DisablePvP(player.ID, true, false);
+                DisablePvP(player.ID.ID, true, false);
 
                 return;
             }
@@ -192,26 +192,26 @@ namespace PvP
 
             if (status == 1)
             {
-                EnablePvP(player.ID);
+                EnablePvP(player.ID.ID);
 
                 return;
             }
             else if(status == 2)
             {
-                DisablePvP(player.ID, true);
+                DisablePvP(player.ID.ID, true);
 
                 return;
             }
 
-            if(pvpPlayers.TryGetValue(player.ID, out ServerTimeStamp time))
+            if(pvpPlayers.TryGetValue(player.ID.ID, out ServerTimeStamp time))
             {
                 if (time.TimeSinceThis > timeBeforeDisablingPvP)
                 {
-                    DisablePvP(player.ID);
+                    DisablePvP(player.ID.ID);
                 }
                 else
                 {
-                    EnablePvP(player.ID);
+                    EnablePvP(player.ID.ID);
                 }
             }
         }

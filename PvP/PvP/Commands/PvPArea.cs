@@ -56,7 +56,7 @@ namespace PvP
 
         private static void TryCreateArea(Players.Player player, AreaType areaType)
         {
-            if (!PvPToolType.playerArea.TryGetValue(player.ID, out Area area))
+            if (!PvPToolType.playerArea.TryGetValue(player.ID.ID, out Area area))
             {
                 Chat.Send(player, "<color=red>You have not created any area, you must use the PvP Tool to create the area.</color>");
 
@@ -87,7 +87,7 @@ namespace PvP
                 }
             }
 
-            PvPToolType.playerArea.Remove(player.ID);
+            PvPToolType.playerArea.Remove(player.ID.ID);
             AreaManager.areas.Add(area);
             Chat.Send(player, "<color=green>" + ((areaType == AreaType.PvP) ? "PvP" : "Non PvP") + " area created</color>");
         }

@@ -32,7 +32,7 @@ namespace PvP
             using (ByteBuilder b = ByteBuilder.Get())
             {
                 b.Write(ClientMessageType.PlayerUpdate);
-                new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
+                new Players.PlayerIDShort(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
 
                 b.Write(NPC.NPCType.GetByKeyNameOrDefault("khanx.pvp").Type);
                 b.Write(FKplayer.Position);
@@ -59,7 +59,7 @@ namespace PvP
                 return false;
 
             if (FKplayer == null)
-                FKplayer = Players.GetPlayer(new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)));
+                FKplayer = Extender.GetPlayer(new Players.PlayerIDShort(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)));
 
             FKplayer.Name = "Fake Player";
             FKplayer.Position = player.Position;
@@ -69,7 +69,7 @@ namespace PvP
             using (ByteBuilder b = ByteBuilder.Get())
             {
                 b.Write(ClientMessageType.PlayerUpdate);
-                new NetworkID(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
+                new Players.PlayerIDShort(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
 
                 b.Write(NPC.NPCType.GetByKeyNameOrDefault("khanx.pvp").Type);
                 b.Write(player.Position);

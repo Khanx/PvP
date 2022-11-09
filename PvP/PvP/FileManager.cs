@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using colonyserver.Assets.UIGeneration;
 using ModLoaderInterfaces;
 using Newtonsoft.Json;
-using Pipliz;
 
 namespace PvP
 {
@@ -25,13 +23,13 @@ namespace PvP
                 PvPManagement.settings = JsonConvert.DeserializeObject<Dictionary<string, int>>(File.ReadAllText(pvpSettingsFile));
 
             if (File.Exists(pvpBannedFile))
-                PvPManagement.LoadBannedPlayers(JsonConvert.DeserializeObject<List<NetworkID>>(File.ReadAllText(pvpBannedFile)));
+                PvPManagement.LoadBannedPlayers(JsonConvert.DeserializeObject<List<Players.PlayerIDShort>>(File.ReadAllText(pvpBannedFile)));
 
             if (File.Exists(pvpAreaFile))
                 AreaManager.areas = JsonConvert.DeserializeObject<List<Area>>(File.ReadAllText(pvpAreaFile));
 
             if (File.Exists(pvpLogFile))
-                PvPManage.killLog = JsonConvert.DeserializeObject<Stack<(System.DateTime, NetworkID, NetworkID)>>(File.ReadAllText(pvpLogFile));
+                PvPManage.killLog = JsonConvert.DeserializeObject<Stack<(System.DateTime, Players.PlayerIDShort, Players.PlayerIDShort)>>(File.ReadAllText(pvpLogFile));
         }
 
         private static void SaveData()

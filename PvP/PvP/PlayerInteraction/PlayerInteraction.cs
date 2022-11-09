@@ -31,7 +31,7 @@ namespace PvP
             if (data.ClickType != PlayerClickedData.EClickType.Left)
                 return;
 
-            if (!PvPManagement.IsInPvP(player.ID))
+            if (!PvPManagement.IsInPvP(player.ID.ID))
             {
 #if DEBUG
                 Chatting.Chat.SendToConnected(player.Name + " don't have PvP enabled.");
@@ -123,7 +123,7 @@ namespace PvP
 
                 LastShoot[(player, Weapon.Sling)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Sling, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                projectiles.Add(new Projectile(ProjectileType.Sling, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Sling shoot: " + player.Position);
 #endif
@@ -136,7 +136,7 @@ namespace PvP
 
                 LastShoot[(player, Weapon.Bow)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Arrow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                projectiles.Add(new Projectile(ProjectileType.Arrow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Bow shoot: " + player.Position);
 #endif
@@ -149,7 +149,7 @@ namespace PvP
 
                 LastShoot[(player, Weapon.Crossbow)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Crossbow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                projectiles.Add(new Projectile(ProjectileType.Crossbow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Crossbow shoot: " + player.Position);
 #endif
@@ -162,7 +162,7 @@ namespace PvP
 
                 LastShoot[(player, Weapon.Matchlockgun)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Matchlock, player.Position + Vector3.up, data.PlayerAimDirection, player.ID));
+                projectiles.Add(new Projectile(ProjectileType.Matchlock, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Matchlockgun shoot: " + player.Position);
 #endif
@@ -187,9 +187,8 @@ namespace PvP
             foreach (Players.Player pl in Players.PlayerDatabase.Values)
             {
 #else
-            for (int i = 0; i < Players.CountConnected; i++)
+            foreach(Players.Player pl in Players.ConnectedPlayers)
             {
-                Players.Player pl = Players.GetConnectedByIndex(i);
 #endif
                 //A plater cannot hit himself
                 if (pl.Equals(player))
@@ -211,7 +210,7 @@ namespace PvP
 #if DEBUG
                     Chatting.Chat.SendToConnected(player.Name + " hits " + pl.Name);
 #endif
-                    AttackPlayer(pl, player.ID, AttackDamage[(int)weapon]);
+                    AttackPlayer(pl, player.ID.ID, AttackDamage[(int)weapon]);
                     break;
                 }
             }
@@ -277,16 +276,14 @@ namespace PvP
                 Ray ray = new Ray(projectile.lastPosition, nextPosition - projectile.lastPosition);
 
                 //Check if HITS a Monster
-                Monsters.IMonster monster = Monsters.MonsterTracker.Find(Vector3Int.RoundToInt(nextPosition), (int)(2 + distanceBetweenShots), 1);
-
-                if (monster != null)
+                if (Monsters.MonsterTracker.TryFindAt(Vector3Int.RoundToInt(nextPosition), Monsters.MonsterTracker.EMonsterFilter.Unpoisoned, out Monsters.IMonster monster))
                 {
-                    Bounds monsterBounds = new Bounds(monster.Position + new Vector3(0, 0.5f, 0), new Vector3(1.25f, 2.25f, 0.5f));
+                    Bounds monsterBounds = new Bounds(monster.Position.Vector + new Vector3(0, 0.5f, 0), new Vector3(1.25f, 2.25f, 0.5f));
 
                     if (monsterBounds.IntersectRay(ray))
                     {
 #if DEBUG
-                        Chatting.Chat.SendToConnected("Hits Zombie: " + monster.Position);
+                    Chatting.Chat.SendToConnected("Hits Zombie: " + monster.Position);
 #endif
                         projectiles.RemoveAt(i);
                         continue;
@@ -314,9 +311,8 @@ namespace PvP
                 foreach (Players.Player pl in Players.PlayerDatabase.Values)
                 {
 #else
-                    for (int j = 0; j < Players.CountConnected; j++)
+                foreach (Players.Player pl in Players.ConnectedPlayers)
                 {
-                        Players.Player pl = Players.GetConnectedByIndex(j);
 #endif
                     //A player cannot shoot himself
                     if (pl.ID.Equals(projectile.shooter))
@@ -330,7 +326,7 @@ namespace PvP
                     if (playerBounds.IntersectRay(ray))
                     {
 #if DEBUG
-                        Chatting.Chat.SendToConnected(Players.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
+                        Chatting.Chat.SendToConnected(Extender.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
 #endif
                         switch (projectile.projectileType)
                         {
@@ -357,17 +353,29 @@ namespace PvP
             }
         }
 
-        public static void AttackPlayer(Players.Player attacked, NetworkID attacker, float damage)
+        public static void AttackPlayer(Players.Player attacked, Players.PlayerIDShort attacker, float damage)
         {
             if (attacked.Health <= 0)
                 return;
 
-            if (!PvPManagement.IsInPvP(attacked.ID))
+            if (!PvPManagement.IsInPvP(attacked.ID.ID))
             {
 #if DEBUG
                 Chatting.Chat.SendToConnected(attacked.Name + " don't have PvP enabled.");
 #endif
                 return;
+            }
+
+            //Not friendly fire
+            if (TeamMgr.TryGetTeam(attacked, out Team team))
+            {
+                if (team.players.Contains(attacker))
+                {
+#if DEBUG
+                    Chatting.Chat.SendToConnected("Stop, Friendly Fire!");  //Is the name of a novel
+#endif
+                    return;
+                }
             }
 
             float damageModifier = 1;
@@ -406,13 +414,13 @@ namespace PvP
             if (attacked.Health <= 0 && attackerPl != null)
             {
                 Chatting.Chat.SendToConnected(attackerPl.Name + " has killed " + attacked.Name);
-                PvPManage.killLog.Push((System.DateTime.Now, attackerPl.ID, attacked.ID));
+                PvPManage.killLog.Push((System.DateTime.Now, attackerPl.ID.ID, attacked.ID.ID));
             }
 
             //Reset PvP cooldown
-            PvPManagement.ResetPvPCoolDown(attacked.ID);
+            PvPManagement.ResetPvPCoolDown(attacked.ID.ID);
             if(attackerPl != null)
-                PvPManagement.ResetPvPCoolDown(attackerPl.ID);
+                PvPManagement.ResetPvPCoolDown(attackerPl.ID.ID);
 
 #if DEBUG
                 Chatting.Chat.SendToConnected("Reset PvP cooldown.");

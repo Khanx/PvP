@@ -7,7 +7,7 @@ namespace PvP
 {
     public class PvPToolType : IAfterWorldLoad, IOnPlayerClicked, IOnSendAreaHighlights
     {
-        public static Dictionary<NetworkID, Area> playerArea = new Dictionary<NetworkID, Area>();
+        public static Dictionary<Players.PlayerIDShort, Area> playerArea = new Dictionary<Players.PlayerIDShort, Area>();
 
         public static ushort pvpTool = 0;
 
@@ -30,17 +30,17 @@ namespace PvP
 
             if (playerClickedData.ClickType == EClickType.Left)
             {
-                var area = playerArea.GetValueOrDefault(player.ID, new Area(playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, AreaType.NotDefined));
+                var area = playerArea.GetValueOrDefault(player.ID.ID, new Area(playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, AreaType.NotDefined));
                 area.min = playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up;
-                playerArea[player.ID] = area;
+                playerArea[player.ID.ID] = area;
 
                 AreaJobTracker.SendData(player);
             }
             else if (playerClickedData.ClickType == EClickType.Right)
             {
-                var area = playerArea.GetValueOrDefault(player.ID, new Area(playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, AreaType.NotDefined));
+                var area = playerArea.GetValueOrDefault(player.ID.ID, new Area(playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up, AreaType.NotDefined));
                 area.max = playerClickedData.GetVoxelHit().BlockHit + Vector3Int.up;
-                playerArea[player.ID] = area;
+                playerArea[player.ID.ID] = area;
 
                 AreaJobTracker.SendData(player);
             }
@@ -55,12 +55,24 @@ namespace PvP
 
             foreach (var area in AreaManager.areas)
             {
-                list.Add(new AreaJobTracker.AreaHighlight(area.min, area.max, Shared.EAreaMeshType.AutoSelect, Shared.EServerAreaType.ConstructionArea));
+                AreaJobTracker.AreaHighlight newArea = new AreaJobTracker.AreaHighlight();
+                newArea.Minimum = area.min;
+                newArea.Maximum = area.max;
+                newArea.MeshType = Shared.EAreaMeshType.AutoSelect;
+                newArea.AreaType = Shared.EServerAreaType.ConstructionArea;
+
+                list.Add(newArea);
             }
 
-            var areaP = playerArea.GetValueOrDefault(player.ID, new Area(Vector3Int.invalidPos, Vector3Int.invalidPos, AreaType.NotDefined));
+            var areaP = playerArea.GetValueOrDefault(player.ID.ID, new Area(Vector3Int.invalidPos, Vector3Int.invalidPos, AreaType.NotDefined));
 
-            list.Add(new AreaJobTracker.AreaHighlight(Vector3Int.Min(areaP.min, areaP.max), Vector3Int.Max(areaP.min, areaP.max), Shared.EAreaMeshType.AutoSelect, Shared.EServerAreaType.ConstructionArea));
+            AreaJobTracker.AreaHighlight newArea2 = new AreaJobTracker.AreaHighlight();
+            newArea2.Minimum = Vector3Int.Min(areaP.min, areaP.max);
+            newArea2.Maximum = Vector3Int.Max(areaP.min, areaP.max);
+            newArea2.MeshType = Shared.EAreaMeshType.AutoSelect;
+            newArea2.AreaType = Shared.EServerAreaType.ConstructionArea;
+
+            list.Add(newArea2);
         }
     }
 }

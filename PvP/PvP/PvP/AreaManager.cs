@@ -40,7 +40,7 @@ namespace PvP
     public class AreaManager : IOnPlayerMoved
     {
         public static List<Area> areas = new List<Area>();
-        public static Dictionary<NetworkID, AreaType> playersWithinAnArea = new Dictionary<NetworkID, AreaType>();
+        public static Dictionary<Players.PlayerIDShort, AreaType> playersWithinAnArea = new Dictionary<Players.PlayerIDShort, AreaType>();
 
         public void OnPlayerMoved(Players.Player player, UnityEngine.Vector3 newLocation)
         {
@@ -50,24 +50,24 @@ namespace PvP
             {
                 if (area.Contains(playerPosition))
                 {
-                    if (!playersWithinAnArea.ContainsKey(player.ID) || playersWithinAnArea[player.ID] != area.areaType)
+                    if (!playersWithinAnArea.ContainsKey(player.ID.ID) || playersWithinAnArea[player.ID.ID] != area.areaType)
                     {
-                        PvPPlayerSkin.ChangePlayerSkin(player.ID);
+                        PvPPlayerSkin.ChangePlayerSkin(player.ID.ID);
 
                         Chatting.Chat.Send(player, (area.areaType == AreaType.PvP) ? "You have entered a <color=red>PvP</color> area." : "You have entered a <color=red>Non PvP</color> area.");
                     }
-                    playersWithinAnArea[player.ID] = area.areaType;
+                    playersWithinAnArea[player.ID.ID] = area.areaType;
 
                     return;
                 }
             }
 
-            if (playersWithinAnArea.ContainsKey(player.ID))
+            if (playersWithinAnArea.ContainsKey(player.ID.ID))
             {
-                Chatting.Chat.Send(player, (playersWithinAnArea[player.ID] == AreaType.PvP) ? "You have left the <color=red>PvP</color> area." : "You have left the <color=red>Non PvP</color> area.");
+                Chatting.Chat.Send(player, (playersWithinAnArea[player.ID.ID] == AreaType.PvP) ? "You have left the <color=red>PvP</color> area." : "You have left the <color=red>Non PvP</color> area.");
 
-                playersWithinAnArea.Remove(player.ID);
-                PvPPlayerSkin.ChangePlayerSkin(player.ID);
+                playersWithinAnArea.Remove(player.ID.ID);
+                PvPPlayerSkin.ChangePlayerSkin(player.ID.ID);
             }
         }
     }

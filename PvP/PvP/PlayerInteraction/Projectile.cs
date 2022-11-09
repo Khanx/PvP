@@ -16,9 +16,9 @@ namespace PvP
         public Vector3 velocity;
         public Vector3 lastPosition;
         public ServerTimeStamp shootTimeMS;
-        public NetworkID shooter;
+        public Players.PlayerIDShort shooter;
 
-        public Projectile(ProjectileType projectileType, Vector3 startPostion, Vector3 direction, NetworkID shooter)
+        public Projectile(ProjectileType projectileType, Vector3 startPostion, Vector3 direction, Players.PlayerIDShort shooter)
         {
             this.projectileType = projectileType;
             this.startPostion = startPostion;

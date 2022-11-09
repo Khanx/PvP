@@ -34,8 +34,12 @@
     <Reference Include="0Harmony, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Lib.Harmony.2.1.1\lib\net472\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Archivos de programa\Steam\steamapps\common\Colony Survival\colonyserver_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net">
+      <HintPath>..\..\..\..\Archivos de programa\Steam\steamapps\common\Colony Survival\colonyserver_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -52,6 +56,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.Mathematics">
+      <HintPath>..\..\..\..\Archivos de programa\Steam\steamapps\common\Colony Survival\colonyserver_Data\Managed\Unity.Mathematics.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -67,7 +74,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlayerInteraction\Healing.cs" />
+    <Compile Include="Commands\PvPTeam.cs" />
+    <Compile Include="Extender.cs" />
     <Compile Include="PlayerInteraction\HitMessage.cs" />
     <Compile Include="PvP\AreaManager.cs" />
     <Compile Include="Commands\PvPArea.cs" />
@@ -81,6 +89,7 @@
     <Compile Include="PvP\PvPPlayerSkin.cs" />
     <Compile Include="PvP\PvPManagement.cs" />
     <Compile Include="PvP\PvPToolType.cs" />
+    <Compile Include="PvP\TeamMgr.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -12,7 +12,7 @@ namespace PvP
     [ChatCommandAutoLoader]
     public class PvPManage : IChatCommand, IOnPlayerPushedNetworkUIButton
     {
-        public static Stack<(DateTime, NetworkID, NetworkID)> killLog = new Stack<(DateTime, NetworkID, NetworkID)>();
+        public static Stack<(DateTime, Players.PlayerIDShort, Players.PlayerIDShort)> killLog = new Stack<(DateTime, Players.PlayerIDShort, Players.PlayerIDShort)>();
 
         public bool TryDoCommand(Players.Player player, string chat, List<string> splits)
         {
@@ -96,9 +96,8 @@ namespace PvP
 
             table.Rows = new List<IItem>();
 
-            for (int i = 0; i < Players.CountConnected; i++)
+            foreach(Players.Player plr in Players.ConnectedPlayers)
             {
-                Players.Player plr = Players.GetConnectedByIndex(i);
                 bool staffMember = PermissionsManager.HasPermission(plr, "khanx.pvp");
 
                 List<(IItem, int)> row = new List<(IItem, int)>();
@@ -108,11 +107,11 @@ namespace PvP
                 {
                     row.Add((new Label(new LabelData("Staff", UnityEngine.Color.blue)), 100));
                 }
-                else if (PvPManagement.IsBanned(plr.ID))
+                else if (PvPManagement.IsBanned(plr.ID.ID))
                 {
                     row.Add((new Label(new LabelData("BANNED", UnityEngine.Color.yellow)), 100));
                 }
-                else if (PvPManagement.HasPvPEnabled(plr.ID))
+                else if (PvPManagement.HasPvPEnabled(plr.ID.ID))
                 {
                     row.Add((new Label(new LabelData("PvP On", UnityEngine.Color.red)), 100));
                 }
@@ -121,8 +120,8 @@ namespace PvP
                     row.Add((new Label(new LabelData("PvP Off", UnityEngine.Color.green)), 100));
                 }
 
-                row.Add((new ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }, isInteractive: !staffMember), 100));
-                row.Add((new ButtonCallback("PvPManage_ChangeBanStatus", new LabelData((PvPManagement.IsBanned(plr.ID) ? "Unban from PvP" : "Ban from PvP"), UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() }, { "returnPlayerList", true } }, isInteractive: !staffMember), 150));
+                row.Add((new ButtonCallback("PvPManage_ChangePvPStatus", new LabelData((PvPManagement.HasPvPEnabled(plr.ID.ID)) ? "Disable PvP" : "Enable PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ID.ID } }, isInteractive: !staffMember), 100));
+                row.Add((new ButtonCallback("PvPManage_ChangeBanStatus", new LabelData((PvPManagement.IsBanned(plr.ID.ID) ? "Unban from PvP" : "Ban from PvP"), UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ID.ID }, { "returnPlayerList", true } }, isInteractive: !staffMember), 150));
 
                 table.Rows.Add(new HorizontalRow(row));
             }
@@ -169,7 +168,7 @@ namespace PvP
                     List<(IItem, int)> row = new List<(IItem, int)>
                     {
                         (new Label(plr.Name), 250),
-                        (new ButtonCallback("PvPManage_UnBanPlayer", new LabelData("Unban from PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ToString() } }), 150)
+                        (new ButtonCallback("PvPManage_UnBanPlayer", new LabelData("Unban from PvP", UnityEngine.Color.white, UnityEngine.TextAnchor.MiddleCenter), onClickActions: NetworkUI.Items.ButtonCallback.EOnClickActions.ClosePopup, ButtonPayload: new JObject() { { "player", plr.ID.ID.ID } }), 150)
                     };
 
                     table.Rows.Add(new HorizontalRow(row));
@@ -260,33 +259,30 @@ namespace PvP
                         case 0:
                             Chat.SendToConnected("Now players can decide his PvP Status");
 
-                            for (int i = 0; i < Players.CountConnected; i++)
+                            foreach (Players.Player plr in Players.ConnectedPlayers)
                             {
-                                Players.Player plr = Players.GetConnectedByIndex(i);
                                 if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
-                                    PvPManagement.DisablePvP(plr.ID, true);
+                                    PvPManagement.DisablePvP(plr.ID.ID, true);
                             }
 
                             break;
                         case 1:
                             Chat.SendToConnected("PvP has been enabled for everyone.");
 
-                            for (int i = 0; i < Players.CountConnected; i++)
+                            foreach (Players.Player plr in Players.ConnectedPlayers)
                             {
-                                Players.Player plr = Players.GetConnectedByIndex(i);
                                 if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
-                                    PvPManagement.EnablePvP(plr.ID);
+                                    PvPManagement.EnablePvP(plr.ID.ID);
                             }
 
                             break;
                         case 2:
                             Chat.SendToConnected("PvP has been disabled for everyone.");
 
-                            for (int i = 0; i < Players.CountConnected; i++)
+                            foreach (Players.Player plr in Players.ConnectedPlayers)
                             {
-                                Players.Player plr = Players.GetConnectedByIndex(i);
                                 if (!PermissionsManager.HasPermission(plr, "khanx.pvp"))
-                                    PvPManagement.DisablePvP(plr.ID, true);
+                                    PvPManagement.DisablePvP(plr.ID.ID, true);
                             }
 
                             break;
@@ -304,7 +300,7 @@ namespace PvP
 
                 case "PvPManage_ChangePvPStatus":
                 {
-                    NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
+                    Players.PlayerIDShort plrId = new Players.PlayerIDShort(data.ButtonPayload.Value<int>("player"));
 
                     if (PvPManagement.HasPvPEnabled(plrId))
                         PvPManagement.DisablePvP(plrId, true);
@@ -317,7 +313,7 @@ namespace PvP
 
                 case "PvPManage_ChangeBanStatus":
                 {
-                    NetworkID plrId = NetworkID.Parse(data.ButtonPayload.Value<string>("player"));
+                    Players.PlayerIDShort plrId = new Players.PlayerIDShort(data.ButtonPayload.Value<int>("player"));
 
                     if (PvPManagement.IsBanned(plrId))
                         PvPManagement.UnBanFromPvP(plrId);
