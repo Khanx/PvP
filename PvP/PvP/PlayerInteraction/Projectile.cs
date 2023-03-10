@@ -10,7 +10,7 @@ namespace PvP
         public static float CrossbowForce = 50f;
         public static float MatchlockForce = 90f;
 
-        public ProjectileType projectileType;
+        public Weapon weapon;
 
         public Vector3 startPostion;
         public Vector3 velocity;
@@ -18,20 +18,20 @@ namespace PvP
         public ServerTimeStamp shootTimeMS;
         public Players.PlayerIDShort shooter;
 
-        public Projectile(ProjectileType projectileType, Vector3 startPostion, Vector3 direction, Players.PlayerIDShort shooter)
+        public Projectile(Weapon weapon, Vector3 startPostion, Vector3 direction, Players.PlayerIDShort shooter)
         {
-            this.projectileType = projectileType;
+            this.weapon = weapon;
             this.startPostion = startPostion;
             this.lastPosition = startPostion;
             this.shootTimeMS = ServerTimeStamp.Now;
             this.shooter = shooter;
 
-            switch (projectileType)
+            switch (weapon)
             {
-                case ProjectileType.Sling: this.velocity = direction * SlingerForce; break;
-                case ProjectileType.Arrow: this.velocity = direction * BowForce; break;
-                case ProjectileType.Crossbow: this.velocity = direction * CrossbowForce; break;
-                case ProjectileType.Matchlock: this.velocity = direction * MatchlockForce; break;
+                case Weapon.Sling: this.velocity = direction * SlingerForce; break;
+                case Weapon.Bow: this.velocity = direction * BowForce; break;
+                case Weapon.Crossbow: this.velocity = direction * CrossbowForce; break;
+                case Weapon.Musket: this.velocity = direction * MatchlockForce; break;
                 default: this.velocity = Vector3.zero; break;
             }
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ModLoaderInterfaces;
+using Newtonsoft.Json.Linq;
 
 namespace PvP
 {
@@ -20,7 +21,10 @@ namespace PvP
         Sling,
         Bow,
         Crossbow,
-        Matchlockgun,
+        Musket,
+
+        Handcannon,
+        Grenadelauncher,
         MAX
     }
 
@@ -73,7 +77,7 @@ namespace PvP
             TimeBetweenAttacks[(int)Weapon.Sling]           = 1000L;
             TimeBetweenAttacks[(int)Weapon.Bow]             = 1500L;
             TimeBetweenAttacks[(int)Weapon.Crossbow]        = 2500L;
-            TimeBetweenAttacks[(int)Weapon.Matchlockgun]    = 3000L;
+            TimeBetweenAttacks[(int)Weapon.Musket]    = 3000L;
 
             AttackDamage[(int)Weapon.Punch]                 = 20f;
 
@@ -92,7 +96,7 @@ namespace PvP
             AttackDamage[(int)Weapon.Sling]                 = 50f;
             AttackDamage[(int)Weapon.Bow]                   = 75f;
             AttackDamage[(int)Weapon.Crossbow]              = 150f;
-            AttackDamage[(int)Weapon.Matchlockgun]          = 200f;
+            AttackDamage[(int)Weapon.Musket]          = 200f;
 
             armorType[0] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPClothArmor");
             armorType[1] = ItemTypes.IndexLookup.GetIndex("Khanx.PvPChainArmor");
@@ -115,6 +119,9 @@ namespace PvP
 
         public static void TryShoot(Players.Player player, PlayerClickedData data)
         {
+            if (!ItemTypes.TryGetType(data.TypeSelected, out var type))
+                return;
+
             if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.sling)
             {
                 //TIME BETWEEM shoots
@@ -123,7 +130,7 @@ namespace PvP
 
                 LastShoot[(player, Weapon.Sling)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Sling, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
+                projectiles.Add(new Projectile(Weapon.Sling, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Sling shoot: " + player.Position);
 #endif
@@ -136,7 +143,7 @@ namespace PvP
 
                 LastShoot[(player, Weapon.Bow)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Arrow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
+                projectiles.Add(new Projectile(Weapon.Bow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Bow shoot: " + player.Position);
 #endif
@@ -149,20 +156,20 @@ namespace PvP
 
                 LastShoot[(player, Weapon.Crossbow)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Crossbow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
+                projectiles.Add(new Projectile(Weapon.Crossbow, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Crossbow shoot: " + player.Position);
 #endif
             }
-            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.matchlockgun)
+            else if (data.TypeSelected == BlockTypes.BuiltinBlocks.Indices.musket)
             {
                 //TIME BETWEEM shoots
-                if (LastShoot.TryGetValue((player, Weapon.Matchlockgun), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)Weapon.Matchlockgun])
+                if (LastShoot.TryGetValue((player, Weapon.Musket), out ServerTimeStamp value) && value.TimeSinceThis < TimeBetweenAttacks[(int)Weapon.Musket])
                     return;
 
-                LastShoot[(player, Weapon.Matchlockgun)] = ServerTimeStamp.Now;
+                LastShoot[(player, Weapon.Musket)] = ServerTimeStamp.Now;
 
-                projectiles.Add(new Projectile(ProjectileType.Matchlock, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
+                projectiles.Add(new Projectile(Weapon.Musket, player.Position + Vector3.up, data.PlayerAimDirection, player.ID.ID));
 #if DEBUG
                 Chatting.Chat.SendToConnected("Matchlockgun shoot: " + player.Position);
 #endif
@@ -328,13 +335,7 @@ namespace PvP
 #if DEBUG
                         Chatting.Chat.SendToConnected(Extender.GetPlayer(projectile.shooter).Name + " shoots " + pl.Name);
 #endif
-                        switch (projectile.projectileType)
-                        {
-                            case ProjectileType.Sling: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Sling]); break;
-                            case ProjectileType.Arrow: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Bow]); break;
-                            case ProjectileType.Crossbow: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Crossbow]); break;
-                            case ProjectileType.Matchlock: AttackPlayer(pl, projectile.shooter, AttackDamage[(int)Weapon.Matchlockgun]); break;
-                        }
+                        AttackPlayer(pl, projectile.shooter, AttackDamage[(int)projectile.weapon]);
 
                         hitPlayer = true;
                         break;

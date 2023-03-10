@@ -32,7 +32,7 @@ namespace PvP
             using (ByteBuilder b = ByteBuilder.Get())
             {
                 b.Write(ClientMessageType.PlayerUpdate);
-                new Players.PlayerIDShort(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
+                b.WriteVariable(FKplayer.ID.ID.ID);
 
                 b.Write(NPC.NPCType.GetByKeyNameOrDefault("khanx.pvp").Type);
                 b.Write(FKplayer.Position);
@@ -59,7 +59,7 @@ namespace PvP
                 return false;
 
             if (FKplayer == null)
-                FKplayer = Extender.GetPlayer(new Players.PlayerIDShort(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)));
+                FKplayer = Players.GetPlayer(Players.ClaimInternalID());
 
             FKplayer.Name = "Fake Player";
             FKplayer.Position = player.Position;
@@ -69,7 +69,7 @@ namespace PvP
             using (ByteBuilder b = ByteBuilder.Get())
             {
                 b.Write(ClientMessageType.PlayerUpdate);
-                new Players.PlayerIDShort(new Steamworks.CSteamID(new Steamworks.AccountID_t(0), Steamworks.EUniverse.k_EUniversePublic, Steamworks.EAccountType.k_EAccountTypeAnonUser)).GetBytes(b);
+                b.WriteVariable(FKplayer.ID.ID.ID);
 
                 b.Write(NPC.NPCType.GetByKeyNameOrDefault("khanx.pvp").Type);
                 b.Write(player.Position);
@@ -125,15 +125,15 @@ namespace PvP
 
                         Chatting.Chat.SendToConnected((area.areaType == AreaType.PvP) ? FKplayer.Name + " have entered a <color=red>PvP</color> area." : FKplayer.Name + " have entered a <color=red>Non PvP</color> area.");
 
-                        AreaManager.playersWithinAnArea[FKplayer.ID] = area.areaType;
+                        AreaManager.playersWithinAnArea[FKplayer.ID.ID] = area.areaType;
                         break;
                     }
                 }
 
-                if (AreaManager.playersWithinAnArea.ContainsKey(FKplayer.ID) && !fkplayerInArea)
+                if (AreaManager.playersWithinAnArea.ContainsKey(FKplayer.ID.ID) && !fkplayerInArea)
                 {
-                    Chatting.Chat.SendToConnected((AreaManager.playersWithinAnArea[FKplayer.ID] == AreaType.PvP) ? FKplayer.Name + " have left the <color=red>PvP</color> area." : FKplayer.Name + " have left the <color=red>Non PvP</color> area.");
-                    AreaManager.playersWithinAnArea.Remove(FKplayer.ID);
+                    Chatting.Chat.SendToConnected((AreaManager.playersWithinAnArea[FKplayer.ID.ID] == AreaType.PvP) ? FKplayer.Name + " have left the <color=red>PvP</color> area." : FKplayer.Name + " have left the <color=red>Non PvP</color> area.");
+                    AreaManager.playersWithinAnArea.Remove(FKplayer.ID.ID);
                 }
             }
 
